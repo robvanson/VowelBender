@@ -342,8 +342,10 @@ while .continue = 1
 
 	numFiles = Get number of rows
 
-	if vowelBenderLogFile$ <> ""
-		writeFileLine: vowelBenderLogFile$, "Title;Speaker;File;Language;Log;Plotfile"
+	if writeLog and vowelBenderLogFile$ <> ""
+		if not fileReadable (vowelBenderLogFile$)
+			writeFileLine: vowelBenderLogFile$, "Title;Speaker;File;Language;Log;Plotfile;date"
+		endif
 	endif
 
 	for .f to numFiles
@@ -365,6 +367,7 @@ while .continue = 1
 
 		filename$ = replace_regex$(inputFilename$, "\.[^\.]+$", "", 0)
 		
+		# Note: . (dot) fractions are not percentages anymore
 		.i_F2fraction = Get value: .f, "i-F2fraction"
 		.i_F2fraction = .i_F2fraction / 100
 		.u_F2fraction = Get value: .f, "u-F2fraction"
@@ -372,7 +375,7 @@ while .continue = 1
 		.a_F1fraction = Get value: .f, "a-F1fraction"
 		.a_F1fraction = .a_F1fraction / 100
 
-		smootheningTime = Get value: .f, "Tsmooth"
+		.smootheningTime = Get value: .f, "Tsmooth"
 
 		# Input data
 		sampleFreq = 11000
@@ -502,8 +505,8 @@ while .continue = 1
 		formants5 = noprogress To Formant: timeStep, 0.1
 		Rename: "Formants5"
 
-		# Low-pass filter F2. Cut-off is 1/smootheningTime
-		if smootheningTime > 0
+		# Low-pass filter F2. Cut-off is 1/.smootheningTime
+		if .smootheningTime > 0
 			##################################
 			# F2
 			##################################
@@ -515,7 +518,7 @@ while .continue = 1
 			Rename: "MatrixF2sound"
 
 			# Filter
-			matrixF2_5_lowPass = Filter (pass Hann band): 0, 1/smootheningTime, 1
+			matrixF2_5_lowPass = Filter (pass Hann band): 0, 1/.smootheningTime, 1
 			matrixF2_6 = Down to Matrix
 			Formula: "1/self"
 			selectObject: formants5
@@ -684,8 +687,8 @@ while .continue = 1
 		finalSound = Convert to mono
 		Rename: "FinalSound"
 		
-		if not index_regex(outFileName$, "\S")
-			outFileName$ = filename$ + "_" + "i-"+ fixed$(i_high, 0) + "_" + "u-"+ fixed$(u_low, 0) + "_" + "a-"+ fixed$(a_max, 0) + "_Smooth-" + fixed$(smootheningTime,3) + "_" + sourceSignal$
+		if outFileName$ = "untitled" or not index_regex(outFileName$, "\S")
+			outFileName$ = filename$ + "_" + "i-"+ fixed$(100*.i_F2fraction, 0) + "_" + "u-"+ fixed$(100*.u_F2fraction, 0) + "_" + "a-"+ fixed$(100*.a_F1fraction, 0) + "_Smooth-" + fixed$(.smootheningTime,3) + "_" + sourceSignal$
 		endif
 		
 		selectObject: finalSound
@@ -714,14 +717,15 @@ while .continue = 1
 		endif
 		
 			
-		if vowelBenderLogFile$ <> ""
+		if writeLog and vowelBenderLogFile$ <> ""
 			appendFileLine: vowelBenderLogFile$, 
 			... outFileName$+";"
 			... + gender$+";"
 			... + targetDir$ + outFileName$ + ".wav"+";"
 			... + "EN" + ";" 
 			... + "-" + ";" 
-			... + targetDir$ + outFileName$ + ".png"
+			... + targetDir$ + outFileName$ + ".png" + ";"
+			... + date$()
 		endif
 
 		#pauseScript: "Pause"
