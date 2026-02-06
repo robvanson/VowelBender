@@ -281,7 +281,8 @@ while .continue = 1
 	# Read filename
 	.fullFilename$ = chooseReadFile$: "Select a file"
 	if .fullFilename$ = "" or not fileReadable(.fullFilename$) or not index_regex(.fullFilename$, "(?i\.(wav|mp3|aif[fc]|flac|nist|au|ogg|csv|tsv))")
-		pauseScript: (uiMessage$ [uiLanguage$, "No readable recording selected "])+.fullFilename$
+		beginPause: ("No readable recording selected "+.fullFilename$)
+		.clicked = endPause: "Continue", 1
 		goto START
 	else
 		inputFile$ = .fullFilename$
@@ -306,7 +307,7 @@ while .continue = 1
 			fileInputTable = Read Table from tab-separated file: inputFile$
 	else
 		# Create file table
-		fileInputTable = Create Table with column names: "table", 1, { "Filename", "Gender", "i-F2fraction", "u-F2fraction", "a-F1fraction", "Tsmooth", "Source", "Output", "Sourcedir", "Targetdir" }
+		fileInputTable = Create Table with column names: "table", 1, { "Filename", "Gender", "i-F2fraction", "u-F2fraction", "a-F1fraction", "Tsmooth", "Source", "Title", "Sourcedir", "Targetdir", "Log" }
 		sourceDir$ = replace_regex$(inputFile$, "[^/\\\\]+$", "", 0)
 		inputFile$ =  replace_regex$(inputFile$, sourceDir$, "", 0)
 		Set string value: 1, "Filename", inputFile$
@@ -318,12 +319,13 @@ while .continue = 1
 		Set string value: 1, "Source", sourceSignal$
 		Set string value: 1, "Sourcedir", sourceDir$
 		Set string value: 1, "Targetdir", targetDir$	
+		Set string value: 1, "Log", vowelBenderLogFile$	
 	endif
 
 	if fileInputTable <= 0
 		exit: "No input"
 	else
-		cols$# = { "Filename", "Gender", "i-F2fraction", "u-F2fraction", "a-F1fraction", "Tsmooth", "Source", "Output", "Sourcedir", "Targetdir" }
+		cols$# = { "Filename", "Gender", "i-F2fraction", "u-F2fraction", "a-F1fraction", "Tsmooth", "Source", "Title", "Sourcedir", "Targetdir", "Log" }
 		numCols = size(cols$#)
 		for .c to numCols
 			selectObject: fileInputTable
@@ -342,22 +344,26 @@ while .continue = 1
 
 	numFiles = Get number of rows
 
-	if writeLog and vowelBenderLogFile$ <> ""
-		if not fileReadable (vowelBenderLogFile$)
-			writeFileLine: vowelBenderLogFile$, "Title;Speaker;File;Language;Log;Plotfile;date"
-		endif
-	endif
-
 	for .f to numFiles
 		selectObject: fileInputTable
 		
 		sourceDir$ = Get value: .f, "Sourcedir"
 		targetDir$ = Get value: .f, "Targetdir"
-		outFileName$ = Get value: .f, "Output"
+		outFileName$ = Get value: .f, "Title"
 		if not index_regex(outFileName$, "\S")
 			outFileName$ = title$
 		endif
+		.currentVowelBenderLogFile$ = Get value: .f, "Log"
+		if not index_regex(.currentVowelBenderLogFile$, "\S")
+			.currentVowelBenderLogFile$ = ""
+		endif
 		
+		if writeLog and .currentVowelBenderLogFile$ <> ""
+			if not fileReadable (.currentVowelBenderLogFile$)
+				writeFileLine: .currentVowelBenderLogFile$, "Title;Speaker;File;Language;Log;Plotfile;date"
+			endif
+		endif
+
 		inputFilename$ = Get value: .f, "Filename"
 		gender$ = Get value: .f, "Gender"
 		sourceSignal$ = Get value: .f, "Source"
@@ -717,8 +723,8 @@ while .continue = 1
 		endif
 		
 			
-		if writeLog and vowelBenderLogFile$ <> ""
-			appendFileLine: vowelBenderLogFile$, 
+		if writeLog and .currentVowelBenderLogFile$ <> ""
+			appendFileLine: .currentVowelBenderLogFile$, 
 			... outFileName$+";"
 			... + gender$+";"
 			... + targetDir$ + outFileName$ + ".wav"+";"
