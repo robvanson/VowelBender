@@ -1,5 +1,7 @@
 ### AL ###
 #Template for AL projects for Dynamics 365 Business Central
+# Mac Finder settings
+.DS_Store
 #launch.json folder
 .vscode/
 #Cache folder
