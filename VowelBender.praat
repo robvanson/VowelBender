@@ -5,7 +5,7 @@
 #
 # Unless specified otherwise:
 #
-# Copyright: 2017-2018, R.J.J.H. van Son and the Netherlands Cancer Institute
+# Copyright: 2025-2026, R.J.J.H. van Son and the Netherlands Cancer Institute
 # License: GNU AFFERO GENERAL PUBLIC LICENSE version 3 or later
 # email: r.j.j.h.vanson@gmail.com, r.v.son@nki.nl
 # 
@@ -199,19 +199,12 @@ phonemes ["Robust", "F", "@", "F2"] = 1415
 # Timestep in seconds
 timeStep = 0.005
 
-# Size of window in second to smooth U-V formants
+# Size of window in seconds to smooth Unvoiced-Voiced formants
 introWindow = 0.05
 
 # Apply to all files
 
-inputFile$ = "../Test/TestFiles_F60E.csv"
-inputFile$ = "../Test/TestFiles_unchanged.csv"
-inputFile$ = "../Test/TestFiles.csv"
-inputFile$ = "../Test/TestFiles_F2.csv"
-inputFile$ = "../Test/TestFiles_F1.csv"
-inputFile$ = "../Test/TestFiles_Tsmooth.csv"
-inputFile$ = "../Test/TestFiles_msm_chp19.csv"
-
+inputFile$ = ""
 gender$ = "F"
 
 separator$ = ";"
@@ -265,8 +258,18 @@ while .continue = 1
 
 	.clicked = endPause: "Help", "Open", 2
 	
-	# Clear
+	# Clear	
 	if .clicked = 1
+		if fileReadable("VowelBender.man") 
+			Read from file: "VowelBender.man"
+		elsif fileReadable("ManPages/VowelBender.man")
+			Read from file: "ManPages/VowelBender.man"
+		else
+			beginPause: "See manual"
+			comment: "https://robvanson.github.io/VowelBender"
+			helpClicked = endPause: "Continue", 1
+		endif
+		goto START
 	endif
 
 	gender$ = {"F", "M", "A"}[gender]
@@ -307,7 +310,7 @@ while .continue = 1
 			fileInputTable = Read Table from tab-separated file: inputFile$
 	else
 		# Create file table
-		fileInputTable = Create Table with column names: "table", 1, { "Filename", "Gender", "i-F2fraction", "u-F2fraction", "a-F1fraction", "Tsmooth", "Source", "Title", "Sourcedir", "Targetdir", "Log" }
+		fileInputTable = Create Table with column names: "table", 1, { "Filename", "Gender", "i-F2fraction", "u-F2fraction", "a-F1fraction", "Tsmooth", "Source", "Title", "Sourcedir", "Targetdir", "Formant", "Log" }
 		sourceDir$ = replace_regex$(inputFile$, "[^/\\\\]+$", "", 0)
 		inputFile$ =  replace_regex$(inputFile$, sourceDir$, "", 0)
 		Set string value: 1, "Filename", inputFile$
@@ -319,13 +322,14 @@ while .continue = 1
 		Set string value: 1, "Source", sourceSignal$
 		Set string value: 1, "Sourcedir", sourceDir$
 		Set string value: 1, "Targetdir", targetDir$	
+		Set string value: 1, "Formant", formantAlgorithm$	
 		Set string value: 1, "Log", vowelBenderLogFile$	
 	endif
 
 	if fileInputTable <= 0
 		exit: "No input"
 	else
-		cols$# = { "Filename", "Gender", "i-F2fraction", "u-F2fraction", "a-F1fraction", "Tsmooth", "Source", "Title", "Sourcedir", "Targetdir", "Log" }
+		cols$# = { "Filename", "Gender", "i-F2fraction", "u-F2fraction", "a-F1fraction", "Tsmooth", "Source", "Title", "Sourcedir", "Targetdir", "Formant", "Log" }
 		numCols = size(cols$#)
 		for .c to numCols
 			selectObject: fileInputTable
@@ -360,7 +364,7 @@ while .continue = 1
 		
 		if writeLog and .currentVowelBenderLogFile$ <> ""
 			if not fileReadable (.currentVowelBenderLogFile$)
-				writeFileLine: .currentVowelBenderLogFile$, "Title;Speaker;File;Language;Log;Plotfile;date"
+				writeFileLine: .currentVowelBenderLogFile$, "Title;Speaker;File;Language;Log;Plotfile;date;i-fraction;u-fraction;a-fraction;T-smooth;Source;Formant"
 			endif
 		endif
 
@@ -439,8 +443,11 @@ while .continue = 1
 
 		# Manipulate formants
 		selectObject: original
-		formants = noprogress To Formant (robust): timeStep, 5, sampleFreq/2, 0.025, preEmphasisFreq, 1.5, 5, 1e-06
-		#formants = noprogress To Formant (burg): timeStep, 5, sampleFreq/2, 0.025, preEmphasisFreq
+		if formantAlgorithm$ = "Robust"
+			formants = noprogress To Formant (robust): timeStep, 5, sampleFreq/2, 0.025, preEmphasisFreq, 1.5, 5, 1e-06
+		else
+			formants = noprogress To Formant (burg): timeStep, 5, sampleFreq/2, 0.025, preEmphasisFreq
+		endif
 		Rename: "OriginalFormants"
 		
 		if sourceSignal$ = "Phonation"	
@@ -731,7 +738,13 @@ while .continue = 1
 			... + "EN" + ";" 
 			... + "-" + ";" 
 			... + targetDir$ + outFileName$ + ".png" + ";"
-			... + date$()
+			... + date$() + ";"
+			... + fixed$(100*.i_F2fraction, 0) + ";"
+			... + fixed$(100*.u_F2fraction, 0) + ";" 
+			... + fixed$(100*.a_F1fraction, 0) + ";"
+			... + fixed$(.smootheningTime,3) + ";"
+			... + sourceSignal$ + ";"
+			... + formantAlgorithm$
 		endif
 
 		#pauseScript: "Pause"
