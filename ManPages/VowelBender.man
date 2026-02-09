@@ -1,0 +1,21 @@
+ManPagesTextFile
+"VowelBender" "Rob van Son" 20260209 0
+<intro> "A %%Praat% script to simulate vowel space changes after oral cancer treatment."
+
+<entry> "Running the script "
+<normal> "When running the script, a form will appear with the following fields:"
+<list_item> "\bu %%Title%%: The title of the current conversion, will become the name of the output file."
+<list_item> "\bu %%Gender%%: Indicate whether the speaker is a %Female or %Male. Gender affects the formant tracking "
+<list_item> "\bu %%Log%%: Store all values also in a semicolon-separated-values text file. This csv file is readable by VowelTriangle.praat"
+<list_item> "\bu %%Formant Algorithm%%: Select the method to calculate the formant values: %Robust or %Burg. "
+<list_item> "\bu %%i schwa F2 fraction (\% )%%: The size of the /i/-/\sw/ (front) corner of the vowel triangle along the F2 axis in percent of the standard value. "
+<list_item> "\bu %%u schwa F2 fraction (\% )%%: The size of the /u/-/\sw/ (back) corner of the vowel triangle along the F2 axis in percent of the standard value. "
+<list_item> "\bu %%a i F1 fraction (\% )%%: the size of the /i/-/a/ (close-open) dimension of the vowel triangle along the F1 axis in percent of the standard value. "
+<list_item> "\bu %%Smoothing Time (sec)%%: The time dimension of the smoothing low pass filter of the formant tracks, in seconds. "
+<list_item> "\bu %%Source Signal%%: Use either standard Praat %Phonation% or a ""whithened"" LPC error signal. A low order (inverse filtered) LPC error signal tends to contain remnants of the original formants, which would defeat the purpose of VowelBender. Therefore, VowelBencer will use tripple the normal LPC order to extract trhe LPC error signal. "
+
+<normal> "Buttons:" 
+<list_item> "\bu %%Undo%: Erase the form."
+<list_item> "\bu %%Stop%: Abort the script."
+<list_item> "\bu %%Help%: Open this manual instead of running the script."
+<list_item> "\bu %%Open%: Open an audio file and perform the manipulations specified in the form, or open a semicolon or tab-separated table with the specifications given in the rows. "
