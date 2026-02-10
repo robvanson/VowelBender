@@ -369,7 +369,7 @@ while .continue = 1
 		
 		if writeLog and .currentVowelBenderLogFile$ <> ""
 			if not fileReadable (.currentVowelBenderLogFile$)
-				writeFileLine: .currentVowelBenderLogFile$, "Title;Speaker;File;Language;Log;Plotfile;date;i-fraction;u-fraction;a-fraction;T-smooth;Source;Formant"
+				writeFileLine: .currentVowelBenderLogFile$, "Title;Speaker;File;Language;Plotfile;date;i-fraction;u-fraction;a-fraction;T-smooth;Source;Formant;Log"
 			endif
 		endif
 
@@ -736,12 +736,12 @@ while .continue = 1
 		
 			
 		if writeLog and .currentVowelBenderLogFile$ <> ""
+			.vowelTriangleLog$ = replace_regex$(.currentVowelBenderLogFile$, "(?iLog)", "VowelTriangleLog", 0)
 			appendFileLine: .currentVowelBenderLogFile$, 
 			... outFileName$+";"
 			... + gender$+";"
 			... + targetDir$ + outFileName$ + ".wav"+";"
 			... + "EN" + ";" 
-			... + "-" + ";" 
 			... + targetDir$ + outFileName$ + ".png" + ";"
 			... + date$() + ";"
 			... + fixed$(100*.i_F2fraction, 0) + ";"
@@ -749,7 +749,8 @@ while .continue = 1
 			... + fixed$(100*.a_F1fraction, 0) + ";"
 			... + fixed$(.smootheningTime,3) + ";"
 			... + sourceSignal$ + ";"
-			... + .currentFormantAlgorithm$
+			... + .currentFormantAlgorithm$ + ";"
+			... + .vowelTriangleLog$
 		endif
 
 		#pauseScript: "Pause"
