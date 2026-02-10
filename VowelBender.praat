@@ -362,6 +362,11 @@ while .continue = 1
 			.currentVowelBenderLogFile$ = ""
 		endif
 		
+		.currentFormantAlgorithm$ = Get value: .f, "Formant"
+		if not index_regex(.currentFormantAlgorithm$, "\S")
+			.currentFormantAlgorithm$ = formantAlgorithm$
+		endif
+		
 		if writeLog and .currentVowelBenderLogFile$ <> ""
 			if not fileReadable (.currentVowelBenderLogFile$)
 				writeFileLine: .currentVowelBenderLogFile$, "Title;Speaker;File;Language;Log;Plotfile;date;i-fraction;u-fraction;a-fraction;T-smooth;Source;Formant"
@@ -395,10 +400,10 @@ while .continue = 1
 			preEmphasisFreq = 50
 		endif
 		
-		i_low = phonemes [formantAlgorithm$, gender$, "i", "F1"]
-		i_high = if  .i_F2fraction > 0 then .i_F2fraction * (phonemes [formantAlgorithm$, gender$, "i", "F2"] - phonemes [formantAlgorithm$, gender$, "@", "F2"]) + phonemes [formantAlgorithm$, gender$, "@", "F2"] else 0 fi
-		u_low  = if  .u_F2fraction > 0 then  .u_F2fraction * (phonemes [formantAlgorithm$, gender$, "u", "F2"] - phonemes [formantAlgorithm$, gender$, "@", "F2"]) + phonemes [formantAlgorithm$, gender$, "@", "F2"] else 0 fi
-		a_max  = if .a_F1fraction > 0 then .a_F1fraction * (phonemes [formantAlgorithm$, gender$, "a", "F1"] - i_low) + i_low else 0 fi
+		i_low = phonemes [.currentFormantAlgorithm$, gender$, "i", "F1"]
+		i_high = if  .i_F2fraction > 0 then .i_F2fraction * (phonemes [.currentFormantAlgorithm$, gender$, "i", "F2"] - phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"]) + phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"] else 0 fi
+		u_low  = if  .u_F2fraction > 0 then  .u_F2fraction * (phonemes [.currentFormantAlgorithm$, gender$, "u", "F2"] - phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"]) + phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"] else 0 fi
+		a_max  = if .a_F1fraction > 0 then .a_F1fraction * (phonemes [.currentFormantAlgorithm$, gender$, "a", "F1"] - i_low) + i_low else 0 fi
 
 		if i_high <= 0
 			i_high = 100000
@@ -413,8 +418,8 @@ while .continue = 1
 		openShift = 0
 		openFactor = 1
 		if a_max > 0
-			openShift = a_max - phonemes [formantAlgorithm$, gender$, "A", "F1"]
-			openFactor = (a_max - i_low) / (phonemes [formantAlgorithm$, gender$, "A", "F1"] - i_low)
+			openShift = a_max - phonemes [.currentFormantAlgorithm$, gender$, "A", "F1"]
+			openFactor = (a_max - i_low) / (phonemes [.currentFormantAlgorithm$, gender$, "A", "F1"] - i_low)
 		endif
 		
 		#Start
@@ -443,7 +448,7 @@ while .continue = 1
 
 		# Manipulate formants
 		selectObject: original
-		if formantAlgorithm$ = "Robust"
+		if .currentFormantAlgorithm$ = "Robust"
 			formants = noprogress To Formant (robust): timeStep, 5, sampleFreq/2, 0.025, preEmphasisFreq, 1.5, 5, 1e-06
 		else
 			formants = noprogress To Formant (burg): timeStep, 5, sampleFreq/2, 0.025, preEmphasisFreq
@@ -493,14 +498,14 @@ while .continue = 1
 		formantGrid = Down to FormantGrid
 		formantGridFormula1 = Copy: "formantGridFormula1"
 		if .u_F2fraction > 1
-			schwaF2 = phonemes [formantAlgorithm$, gender$, "@", "F2"]
+			schwaF2 = phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"]
 			Formula (frequencies): "if row = 2 then if self < schwaF2 then schwaF2 + (self - schwaF2) * .u_F2fraction else self fi else self fi"
 		else
 			Formula (frequencies): "if row = 2 then if self <= u_low then u_low else self fi else self fi"
 		endif
 		formantGridFormula2 = Copy: "formantGridFormula2"
 		if .i_F2fraction > 1
-			schwaF2 = phonemes [formantAlgorithm$, gender$, "@", "F2"]
+			schwaF2 = phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"]
 			Formula (frequencies): "if row = 2 then if self > schwaF2 then schwaF2 + (self - schwaF2) * .i_F2fraction else self fi else self fi"
 		else
 			Formula (frequencies): "if row = 2 then if self <= u_low then u_low else self fi else self fi"
@@ -744,7 +749,7 @@ while .continue = 1
 			... + fixed$(100*.a_F1fraction, 0) + ";"
 			... + fixed$(.smootheningTime,3) + ";"
 			... + sourceSignal$ + ";"
-			... + formantAlgorithm$
+			... + .currentFormantAlgorithm$
 		endif
 
 		#pauseScript: "Pause"
