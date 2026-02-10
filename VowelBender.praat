@@ -401,9 +401,18 @@ while .continue = 1
 		endif
 		
 		i_low = phonemes [.currentFormantAlgorithm$, gender$, "i", "F1"]
-		i_high = if  .i_F2fraction > 0 then .i_F2fraction * (phonemes [.currentFormantAlgorithm$, gender$, "i", "F2"] - phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"]) + phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"] else 0 fi
-		u_low  = if  .u_F2fraction > 0 then  .u_F2fraction * (phonemes [.currentFormantAlgorithm$, gender$, "u", "F2"] - phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"]) + phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"] else 0 fi
-		a_max  = if .a_F1fraction > 0 then .a_F1fraction * (phonemes [.currentFormantAlgorithm$, gender$, "a", "F1"] - i_low) + i_low else 0 fi
+		i_high = 0
+		if .i_F2fraction > 0
+			i_high = semitonesToHertz (.i_F2fraction * (hertzToSemitones (phonemes [.currentFormantAlgorithm$, gender$, "i", "F2"]) - hertzToSemitones (phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"]) ) + hertzToSemitones (phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"]) )
+		endif
+		u_low = 0
+		 if  .u_F2fraction > 0
+			u_low  =  semitonesToHertz (.u_F2fraction * (hertzToSemitones (phonemes [.currentFormantAlgorithm$, gender$, "u", "F2"]) - hertzToSemitones (phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"]) ) + hertzToSemitones (phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"] ) )
+		endif
+		a_max = 0
+		if .a_F1fraction > 0
+			a_max  =  semitonesToHertz (.a_F1fraction * (hertzToSemitones (phonemes [.currentFormantAlgorithm$, gender$, "a", "F1"] )  - hertzToSemitones (i_low) ) + hertzToSemitones ( i_low ) ) 
+		endif
 
 		if i_high <= 0
 			i_high = 100000
@@ -497,18 +506,18 @@ while .continue = 1
 		
 		formantGrid = Down to FormantGrid
 		formantGridFormula1 = Copy: "formantGridFormula1"
-		if .u_F2fraction > 1
+		if .u_F2fraction > 100
 			schwaF2 = phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"]
 			Formula (frequencies): "if row = 2 then if self < schwaF2 then schwaF2 + (self - schwaF2) * .u_F2fraction else self fi else self fi"
 		else
-			Formula (frequencies): "if row = 2 then if self <= u_low then u_low else self fi else self fi"
+			Formula (frequencies): "if row = 2 then if self < u_low then u_low else self fi else self fi"
 		endif
 		formantGridFormula2 = Copy: "formantGridFormula2"
-		if .i_F2fraction > 1
+		if .i_F2fraction > 100
 			schwaF2 = phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"]
 			Formula (frequencies): "if row = 2 then if self > schwaF2 then schwaF2 + (self - schwaF2) * .i_F2fraction else self fi else self fi"
 		else
-			Formula (frequencies): "if row = 2 then if self <= u_low then u_low else self fi else self fi"
+			Formula (frequencies): "if row = 2 then if self > i_high then i_high else self fi else self fi"
 		endif
 		formantGridFormula3 = Copy: "formantGridFormula3"
 		#Formula (frequencies): "if row = 1 then i_low + openFactor * (self - i_low) else self fi"
@@ -770,16 +779,16 @@ while .continue = 1
 
 	
 	# Ready or not?
-	beginPause: "Continue?"
-		comment: "Continue with new data or stop the script"
-	.clicked = endPause: "Continue", "Done", 2, 2
-	.continue = (.clicked = 1)
+	pauseScript: "Continue with new data or stop the script"
+	.continue = 1
 	
 	label NEXTROUND
 	
 endwhile
 
-# Funtion to do a cosine interpolation between two formant values
+label ENDOFVOWELBENDER
+
+# Function to do a cosine interpolation between two formant values
 procedure cosineInterpolation: .t, .startValue, .endValue, .startTime, .endTime
 	.value = .startValue + (.endValue - .startValue) * (1 - cos(pi * (.t - .startTime)/(.endTime - .startTime)))/2
 endproc
