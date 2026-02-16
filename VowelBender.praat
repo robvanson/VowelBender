@@ -31,7 +31,7 @@ sourceDir$ = "../Speech/"
 targetDir$ = ""
 
 defaultSourceSignal$ = "Phonation"
-formantAlgorithm$ = "Robust"
+targetFormantAlgorithm$ = "Robust"
 
 # Generate VowelTriangle non-interactive table
 vowelBenderLogFile$ = "../Test/VowelBenderLog.csv"
@@ -115,6 +115,28 @@ phonemes ["Burg", "F", "y", "F2"] = 1803
 phonemes ["Burg", "F", "@", "F1"] = 440
 phonemes ["Burg", "F", "@", "F2"] = 1415
 
+# Triangle
+# Male 
+phonemes ["Burg", "M", "i_corner", "F1"] = phonemes ["Burg", "M", "i", "F1"]/(2^(1/12))
+phonemes ["Burg", "M", "i_corner", "F2"] = phonemes ["Burg", "M", "i", "F2"]*(2^(1/12))
+phonemes ["Burg", "M", "a_corner", "F1"] = phonemes ["Burg", "M", "a", "F1"]*(2^(1/12))
+phonemes ["Burg", "M", "a_corner", "F2"] = phonemes ["Burg", "M", "a", "F2"]
+phonemes ["Burg", "M", "u_corner", "F1"] = phonemes ["Burg", "M", "u", "F1"]/(2^(1/12))
+phonemes ["Burg", "M", "u_corner", "F2"] = phonemes ["Burg", "M", "u", "F2"]/(2^(1/12))
+# @_center is not fixed but derived from current corners
+phonemes ["Burg", "M", "@_center", "F1"] =(phonemes ["Burg", "M", "i_corner", "F1"]*phonemes ["Burg", "M", "u_corner", "F1"]*phonemes ["Burg", "M", "a_corner", "F1"])^(1/3)
+phonemes ["Burg", "M", "@_center", "F2"] = (phonemes ["Burg", "M", "i_corner", "F2"]*phonemes ["Burg", "M", "u_corner", "F2"]*phonemes ["Burg", "M", "a_corner", "F2"])^(1/3)
+
+# Female
+phonemes ["Burg", "F", "i_corner", "F1"] = phonemes ["Burg", "F", "i", "F1"]/(2^(1/12))
+phonemes ["Burg", "F", "i_corner", "F2"] = phonemes ["Burg", "F", "i", "F2"]*(2^(1/12))
+phonemes ["Burg", "F", "a_corner", "F1"] = phonemes ["Burg", "F", "a", "F1"]*(2^(1/12))
+phonemes ["Burg", "F", "a_corner", "F2"] = phonemes ["Burg", "F", "a", "F2"]
+phonemes ["Burg", "F", "u_corner", "F1"] = phonemes ["Burg", "F", "u", "F1"]/(2^(1/12))
+phonemes ["Burg", "F", "u_corner", "F2"] = phonemes ["Burg", "F", "u", "F2"]/(2^(1/12))
+# @_center is not fixed but derived from current corners
+phonemes ["Burg", "F", "@_center", "F1"] =(phonemes ["Burg", "F", "i_corner", "F1"]*phonemes ["Burg", "F", "u_corner", "F1"]*phonemes ["Burg", "F", "a_corner", "F1"])^(1/3)
+phonemes ["Burg", "F", "@_center", "F2"] = (phonemes ["Burg", "F", "i_corner", "F2"]*phonemes ["Burg", "F", "u_corner", "F2"]*phonemes ["Burg", "F", "a_corner", "F2"])^(1/3)
 
 ###############################################
 #
@@ -194,6 +216,29 @@ phonemes ["Robust", "F", "y", "F2"] = 1765
 phonemes ["Robust", "F", "@", "F1"] = 440
 phonemes ["Robust", "F", "@", "F2"] = 1415
 
+# Triangle
+# Male
+phonemes ["Robust", "M", "i_corner", "F1"] = phonemes ["Robust", "M", "i", "F1"]/(2^(1/12))
+phonemes ["Robust", "M", "i_corner", "F2"] = phonemes ["Robust", "M", "i", "F2"]*(2^(1/12))
+phonemes ["Robust", "M", "a_corner", "F1"] = phonemes ["Robust", "M", "a", "F1"]*(2^(1/12))
+phonemes ["Robust", "M", "a_corner", "F2"] = phonemes ["Robust", "M", "a", "F2"]
+phonemes ["Robust", "M", "u_corner", "F1"] = phonemes ["Robust", "M", "u", "F1"]/(2^(1/12))
+phonemes ["Robust", "M", "u_corner", "F2"] = phonemes ["Robust", "M", "u", "F2"]/(2^(1/12))
+# @_center is not fixed but derived from current corners
+phonemes ["Robust", "M", "@_center", "F1"] =(phonemes ["Robust", "M", "i_corner", "F1"]*phonemes ["Robust", "M", "u_corner", "F1"]*phonemes ["Robust", "M", "a_corner", "F1"])^(1/3)
+phonemes ["Robust", "M", "@_center", "F2"] = (phonemes ["Robust", "M", "i_corner", "F2"]*phonemes ["Robust", "M", "u_corner", "F2"]*phonemes ["Robust", "M", "a_corner", "F2"])^(1/3)
+                                              
+# Female
+phonemes ["Robust", "F", "i_corner", "F1"] = phonemes ["Robust", "F", "i", "F1"]/(2^(1/12))
+phonemes ["Robust", "F", "i_corner", "F2"] = phonemes ["Robust", "F", "i", "F2"]*(2^(1/12))
+phonemes ["Robust", "F", "a_corner", "F1"] = phonemes ["Robust", "F", "a", "F1"]*(2^(1/12))
+phonemes ["Robust", "F", "a_corner", "F2"] = phonemes ["Robust", "F", "a", "F2"]
+phonemes ["Robust", "F", "u_corner", "F1"] = phonemes ["Robust", "F", "u", "F1"]/(2^(1/12))
+phonemes ["Robust", "F", "u_corner", "F2"] = phonemes ["Robust", "F", "u", "F2"]/(2^(1/12))
+# @_center is not fixed but derived from current corners
+phonemes ["Robust", "F", "@_center", "F1"] =(phonemes ["Robust", "F", "i_corner", "F1"]*phonemes ["Robust", "F", "u_corner", "F1"]*phonemes ["Robust", "F", "a_corner", "F1"])^(1/3)
+phonemes ["Robust", "F", "@_center", "F2"] = (phonemes ["Robust", "F", "i_corner", "F2"]*phonemes ["Robust", "F", "u_corner", "F2"]*phonemes ["Robust", "F", "a_corner", "F2"])^(1/3)
+
 #####################################
 
 # Timestep in seconds
@@ -246,6 +291,7 @@ while .continue = 1
 		optionMenu: "Formant Algorithm", formant_algorithm
 			option: "Robust"
 			option: "Burg"
+			option: "FormantPath"
 		comment: "Size of the thee corners of the vowel space (% of citation space)"
 		real: "i schwa F2 fraction (%)", i_F2fraction	
 		real: "u schwa F2 fraction (%)", u_F2fraction
@@ -274,7 +320,7 @@ while .continue = 1
 
 	gender$ = {"F", "M", "A"}[gender]
 	writeLog = log
-	formantAlgorithm$ = {"Robust", "Burg"}[ formant_algorithm]
+	targetFormantAlgorithm$ = {"Robust", "Burg", "FormantPath"}[ formant_algorithm]
 	i_F2fraction = i_schwa_F2_fraction
 	u_F2fraction = u_schwa_F2_fraction
     a_F1fraction = a_i_F1_fraction
@@ -322,7 +368,7 @@ while .continue = 1
 		Set string value: 1, "Source", sourceSignal$
 		Set string value: 1, "Sourcedir", sourceDir$
 		Set string value: 1, "Targetdir", targetDir$	
-		Set string value: 1, "Formant", formantAlgorithm$	
+		Set string value: 1, "Formant", targetFormantAlgorithm$	
 		Set string value: 1, "Log", vowelBenderLogFile$	
 	endif
 
@@ -364,7 +410,7 @@ while .continue = 1
 		
 		.currentFormantAlgorithm$ = Get value: .f, "Formant"
 		if not index_regex(.currentFormantAlgorithm$, "\S")
-			.currentFormantAlgorithm$ = formantAlgorithm$
+			.currentFormantAlgorithm$ = targetFormantAlgorithm$
 		endif
 		
 		if writeLog and .currentVowelBenderLogFile$ <> ""
@@ -444,8 +490,8 @@ while .continue = 1
 		pointProcess = noprogress To PointProcess (periodic, cc): 75, 600
 		selectObject: pointProcess
 		Rename: "VoicingPP"
-		voicingGrid = To TextGrid (vuv): 0.02, 0.01
-		Rename: "VoicingGrid"
+		#vowelGrid = To TextGrid (vuv): 0.02, 0.01	
+		#Rename: "VowelGrid"
 		
 		selectObject: recordingMono
 		original = Resample: sampleFreq, 50
@@ -455,15 +501,42 @@ while .continue = 1
 		selectObject: recording
 		Remove
 
-		# Manipulate formants
+		# Calculate formants
 		selectObject: original
 		if .currentFormantAlgorithm$ = "Robust"
 			formants = noprogress To Formant (robust): timeStep, 5, sampleFreq/2, 0.025, preEmphasisFreq, 1.5, 5, 1e-06
+			selectObject: original
+			formantsBandwidth = noprogress To Formant (burg): timeStep, 5, sampleFreq/2, 0.025, preEmphasisFreq
+		elsif .currentFormantAlgorithm$ = "FormantPath"
+			formants = noprogress To FormantPath: timeStep, 5, sampleFreq/2, 0.025, preEmphasisFreq, "Burg", 0.05, 4, 1e-06, 1e-06, 1.5, 5, 1e-06, "no"
+			selectObject: original
+			formantsBandwidth = noprogress To Formant (burg): timeStep, 5, sampleFreq/2, 0.025, preEmphasisFreq
 		else
 			formants = noprogress To Formant (burg): timeStep, 5, sampleFreq/2, 0.025, preEmphasisFreq
+			formantsBandwidth = Copy: "FormantsBandwith"
 		endif
+		selectObject: formants
 		Rename: "OriginalFormants"
 		
+		call segment_syllables -25 4 0.3 1 original
+		.syllableKernels = segment_syllables.textgridid
+		@select_vowel_target: gender$, original, formants, formantsBandwidth, .syllableKernels
+		.vowelTier = select_vowel_target.vowelTier
+		.targetTier = select_vowel_target.targetTier
+		selectObject: .syllableKernels
+		vowelGrid = Extract one tier: .vowelTier
+		.numIntervals = Get number of intervals: 1
+		for .int to .numIntervals
+			selectObject: vowelGrid
+			.label$ = Get label of interval: 1, .int
+			if .label$ <> "Vowel"
+				Set interval text: 1, .int, "U"
+			endif
+		endfor
+		selectObject: formantsBandwidth, .syllableKernels
+		Remove
+		
+		# Manipulate formants
 		if sourceSignal$ = "Phonation"	
 			# Create phonation sound
 			selectObject: pointProcess
@@ -551,12 +624,12 @@ while .continue = 1
 			selectObject: formants5
 			
 			# Replace F2 values with filtered F2
-			selectObject: voicingGrid
+			selectObject: vowelGrid
 			numIntervals = Get number of intervals: 1
 			for .i to numIntervals
-				selectObject: voicingGrid
-				.voicing$ = Get label of interval: 1, .i
-				if .voicing$ = "V"
+				selectObject: vowelGrid
+				.vowelSegment$ = Get label of interval: 1, .i
+				if .vowelSegment$ = "Vowel"
 					.start = Get start time of interval: 1, .i
 					.end = Get end time of interval: 1, .i
 					selectObject: formants5
@@ -588,17 +661,17 @@ while .continue = 1
 		endif
 
 		##################################
-		#
-		# Smooth intro to voiced intervals
+		#	
+		#	vowel		
 		# 
 		##################################
 		# Replace F2 values with smoothed F1/F2
-		selectObject: voicingGrid
+		selectObject: vowelGrid
 		numIntervals = Get number of intervals: 1
 		for .i to numIntervals - 1
-			selectObject: voicingGrid
-			.voicing$ = Get label of interval: 1, .i
-			if .voicing$ = "U"
+			selectObject: vowelGrid
+			.vowelSegment$ = Get label of interval: 1, .i
+			if .vowelSegment$ = "U"
 				.start = Get start time of interval: 1, .i
 				.end = Get end time of interval: 1, .i
 				.currenIntroWindow = min(introWindow, .end - .start)
@@ -692,15 +765,15 @@ while .continue = 1
 		selectObject: recombinedHighLow
 		Scale intensity: 70
 		
-		selectObject: voicingGrid
+		selectObject: vowelGrid
 		numIntervals = Get number of intervals: 1
 		for .i to numIntervals
-			selectObject: voicingGrid
-			.voicing$ = Get label of interval: 1, .i
+			selectObject: vowelGrid
+			.vowelSegment$ = Get label of interval: 1, .i
 			.start = Get start time of interval: 1, .i
 			.end = Get end time of interval: 1, .i
 
-			if .voicing$ = "V"
+			if .vowelSegment$ = "Vowel"
 				selectObject: recordingMono
 				Set part to zero: .start, .end, "at exactly these times"
 			else
@@ -769,7 +842,7 @@ while .continue = 1
 		selectObject: recordingMono, original, formantGrid, formantGridFormula1,formantGridFormula2
 		plusObject: formantGridFormula3, formantGridFormula4
 		plusObject: reconstructedSpeech, reshapedSpeech, newSpeechSource, recombinedHighLow
-		plusObject: pointProcess, voicingGrid, stereoFinalSound, finalSound
+		plusObject: pointProcess, vowelGrid, stereoFinalSound, finalSound
 		Remove
 
 	endfor
@@ -792,3 +865,7 @@ label ENDOFVOWELBENDER
 procedure cosineInterpolation: .t, .startValue, .endValue, .startTime, .endTime
 	.value = .startValue + (.endValue - .startValue) * (1 - cos(pi * (.t - .startTime)/(.endTime - .startTime)))/2
 endproc
+
+# 
+# Load VowelTriangleProcedures.praat 
+include VowelTriangleProcedures.praat
