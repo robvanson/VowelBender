@@ -299,8 +299,9 @@ while .continue = 1
 		real: "Smoothing Time (sec)", smootheningTime
 		comment: "Select the source signal to use for re-synthesis"
 		optionMenu: "Source Signal", source_signal
-			option: "Phonation"
 			option: "LPCerror"
+			option: "Phonation"
+			option: "Pulse Train"
 
 	.clicked = endPause: "Help", "Open", 2
 	
@@ -325,7 +326,7 @@ while .continue = 1
 	u_F2fraction = u_schwa_F2_fraction
     a_F1fraction = a_i_F1_fraction
 	smootheningTime = smoothing_Time
-	sourceSignal$ = {"Phonation", "LPCerror"}[source_Signal]
+	sourceSignal$ = { "LPCerror", "Phonation","Pulse Train"}[source_Signal]
 	
 	# Read filename
 	.fullFilename$ = chooseReadFile$: "Select a file"
@@ -541,6 +542,10 @@ while .continue = 1
 			# Create phonation sound
 			selectObject: pointProcess
 			newSpeechSource = To Sound (phonation): origSampleFreq, 1, 0.05, 0.7, 0.03, 3, 4
+		elsif sourceSignal$ = "Pulse Train"
+			# Create pulse train sound
+			selectObject: pointProcess
+			newSpeechSource = To Sound (pulse train): origSampleFreq, 1, 0.05, 2000
 		else
 			# Create LPC error signal
 			#selectObject: recordingMono
@@ -819,8 +824,7 @@ while .continue = 1
 			
 		if writeLog and .currentVowelBenderLogFile$ <> ""
 			.vowelTriangleLog$ = replace_regex$(.currentVowelBenderLogFile$, "(?iLog)", "VowelTriangleLog", 0)
-			appendFileLine: .currentVowelBenderLogFile$, 
-			... outFileName$+";"
+			.rowLine$ = outFileName$+";"
 			... + gender$+";"
 			... + targetDir$ + outFileName$ + ".wav"+";"
 			... + "EN" + ";" 
@@ -833,6 +837,9 @@ while .continue = 1
 			... + sourceSignal$ + ";"
 			... + .currentFormantAlgorithm$ + ";"
 			... + .vowelTriangleLog$
+			.rowLine$ = replace$ (.rowLine$, "--undefined--", "NA", 0)
+
+			appendFileLine: .currentVowelBenderLogFile$, .rowLine$
 		endif
 
 		#pauseScript: "Pause"
