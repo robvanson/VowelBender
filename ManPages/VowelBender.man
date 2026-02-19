@@ -12,7 +12,7 @@ ManPagesTextFile
 <list_item> "\bu %%u schwa F2 fraction (\% )%%: The size of the /u/-/\sw/ (back) corner of the vowel triangle along the F2 axis in percent of the standard value. "
 <list_item> "\bu %%a i F1 fraction (\% )%%: the size of the /i/-/a/ (close-open) dimension of the vowel triangle along the F1 axis in percent of the standard value. "
 <list_item> "\bu %%Smoothing Time (sec)%%: The time dimension of the smoothing low pass filter of the formant tracks, in seconds. "
-<list_item> "\bu %%Source Signal%%: Use either standard Praat %Phonation% or a ""whithened"" LPC error signal. A low order (inverse filtered) LPC error signal tends to contain remnants of the original formants, which would defeat the purpose of VowelBender. Therefore, VowelBencer will use tripple the normal LPC order to extract trhe LPC error signal. "
+<list_item> "\bu %%Source Signal%%: Select one of %%Pulse Train%%, %LPCerror%, a ""whithened"" LPC error signal, or standard Praat %Phonation% or. (Re-)Synthesizing LPC formant tracks from anything other than the original LPC error signal tends to introduce audible artefacts. ""Best"" source selections depends on speaker, speech, source signal, and analysis parameters. %VowelBender% offers a choice of source signals to select the best fitting for the task. A %%Pulse Train%% has a white sound spectrum which fits the assumptions of LPC formant algorithms. A low order (inverse filtered) LPC error signal tends to contain remnants of the original formants, which would defeat the purpose of VowelBender. Therefore, VowelBender uses tripple the normal LPC order to extract the LPC error signal. The %Phonation% source signal implements a plausible glottal source signal."
 
 <normal> "Buttons:" 
 <list_item> "\bu %%Undo%: Erase the form."

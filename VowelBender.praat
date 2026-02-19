@@ -299,9 +299,9 @@ while .continue = 1
 		real: "Smoothing Time (sec)", smootheningTime
 		comment: "Select the source signal to use for re-synthesis"
 		optionMenu: "Source Signal", source_signal
+			option: "Pulse Train"
 			option: "LPCerror"
 			option: "Phonation"
-			option: "Pulse Train"
 
 	.clicked = endPause: "Help", "Open", 2
 	
@@ -326,7 +326,7 @@ while .continue = 1
 	u_F2fraction = u_schwa_F2_fraction
     a_F1fraction = a_i_F1_fraction
 	smootheningTime = smoothing_Time
-	sourceSignal$ = { "LPCerror", "Phonation","Pulse Train"}[source_Signal]
+	sourceSignal$ = {"Pulse Train", "LPCerror", "Phonation"}[source_Signal]
 	
 	# Read filename
 	.fullFilename$ = chooseReadFile$: "Select a file"
