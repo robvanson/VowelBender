@@ -400,6 +400,7 @@ while .continue = 1
 		
 		sourceDir$ = Get value: .f, "Sourcedir"
 		targetDir$ = Get value: .f, "Targetdir"
+		createFolder(targetDir$)
 		outFileName$ = Get value: .f, "Title"
 		if not index_regex(outFileName$, "\S")
 			outFileName$ = title$
