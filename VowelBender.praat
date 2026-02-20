@@ -27,14 +27,14 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # 
 
-sourceDir$ = "../Speech/"
+sourceDir$ = ""
 targetDir$ = ""
 
 defaultSourceSignal$ = "Phonation"
 targetFormantAlgorithm$ = "Robust"
 
 # Generate VowelTriangle non-interactive table
-vowelBenderLogFile$ = "../Test/VowelBenderLog.csv"
+vowelBenderLogFile$ = "./VowelBenderLog.csv"
 writeLog = 1
 
 ###############################################
@@ -289,8 +289,8 @@ while .continue = 1
 		boolean: "Log", writeLog
 		comment: "Select the format tracking algorithm to use"
 		optionMenu: "Formant Algorithm", formant_algorithm
-			option: "Robust"
 			option: "Burg"
+			option: "Robust"
 			option: "FormantPath"
 		comment: "Size of the thee corners of the vowel space (% of citation space)"
 		real: "i schwa F2 fraction (%)", i_F2fraction	
@@ -321,7 +321,7 @@ while .continue = 1
 
 	gender$ = {"F", "M", "A"}[gender]
 	writeLog = log
-	targetFormantAlgorithm$ = {"Robust", "Burg", "FormantPath"}[ formant_algorithm]
+	targetFormantAlgorithm$ = {"Burg", "Robust", "FormantPath"}[ formant_algorithm]
 	i_F2fraction = i_schwa_F2_fraction
 	u_F2fraction = u_schwa_F2_fraction
     a_F1fraction = a_i_F1_fraction
@@ -400,7 +400,11 @@ while .continue = 1
 		
 		sourceDir$ = Get value: .f, "Sourcedir"
 		targetDir$ = Get value: .f, "Targetdir"
-		createFolder(targetDir$)
+		if index_regex(targetDir$, "\S") > 0
+			createFolder(targetDir$)
+		else
+			targetDir$ = ""
+		endif
 		outFileName$ = Get value: .f, "Title"
 		if not index_regex(outFileName$, "\S")
 			outFileName$ = title$
@@ -450,15 +454,15 @@ while .continue = 1
 		
 		i_low = phonemes [.currentFormantAlgorithm$, gender$, "i", "F1"]
 		i_high = 0
-		if .i_F2fraction > 0
+		if .i_F2fraction != 0
 			i_high = semitonesToHertz (.i_F2fraction * (hertzToSemitones (phonemes [.currentFormantAlgorithm$, gender$, "i", "F2"]) - hertzToSemitones (phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"]) ) + hertzToSemitones (phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"]) )
 		endif
 		u_low = 0
-		 if  .u_F2fraction > 0
+		 if  .u_F2fraction != 0
 			u_low  =  semitonesToHertz (.u_F2fraction * (hertzToSemitones (phonemes [.currentFormantAlgorithm$, gender$, "u", "F2"]) - hertzToSemitones (phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"]) ) + hertzToSemitones (phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"] ) )
 		endif
 		a_max = 0
-		if .a_F1fraction > 0
+		if .a_F1fraction != 0
 			a_max  =  semitonesToHertz (.a_F1fraction * (hertzToSemitones (phonemes [.currentFormantAlgorithm$, gender$, "a", "F1"] )  - hertzToSemitones (i_low) ) + hertzToSemitones ( i_low ) ) 
 		endif
 
