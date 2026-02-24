@@ -5,6 +5,10 @@
 
 *VowelBender* is mainly designed to help studying the perceptual consequences of changes in articulatory vowel space on the perception of speech, eg, intelligibility, and data augmentation for training Deep Neural Networks.
 
+## Audio examples
+
+[Treasure Island examples](Examples/Parallel Audiobook Corpus Treasure)
+
 ## Repositories
 
 *VowelBender* git repositories are available at:
