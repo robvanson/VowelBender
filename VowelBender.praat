@@ -398,6 +398,12 @@ while .continue = 1
 	for .f to numFiles
 		selectObject: fileInputTable
 		
+		.colLabel$ = Get column label: 1
+		.firstValue$ = Get value: .f, .colLabel$
+		if startsWith(.firstValue$, "#")
+			goto NEXTROW
+		endif
+		
 		sourceDir$ = Get value: .f, "Sourcedir"
 		targetDir$ = Get value: .f, "Targetdir"
 		if index_regex(targetDir$, "\S") > 0
@@ -466,6 +472,13 @@ while .continue = 1
 			a_max  =  semitonesToHertz (.a_F1fraction * (hertzToSemitones (phonemes [.currentFormantAlgorithm$, gender$, "a", "F1"] )  - hertzToSemitones (i_low) ) + hertzToSemitones ( i_low ) ) 
 		endif
 
+		# Fractions can be negative, and result in reversed F2 limits, correct them
+		if i_high < u_low
+			.tmp = u_low
+			u_low = i_high
+			i_ high = .tmp
+		endif
+		# Sanitize values
 		if i_high <= 0
 			i_high = 100000
 		endif
@@ -610,7 +623,7 @@ while .continue = 1
 		selectObject: formants
 		Remove
 
-		# Create fomants from FormantGrid	for manipulation
+		# Create fomants from FormantGrid for manipulation
 		selectObject: formantGridFormula4
 		formants5 = noprogress To Formant: timeStep, 0.1
 		Rename: "Formants5"
@@ -857,6 +870,7 @@ while .continue = 1
 		plusObject: pointProcess, vowelGrid, stereoFinalSound, finalSound
 		Remove
 
+		label NEXTROW
 	endfor
 
 	selectObject: fileInputTable
