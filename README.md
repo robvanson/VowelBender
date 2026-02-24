@@ -7,7 +7,7 @@
 
 ## Audio examples
 
-[Treasure Island examples](Examples/Parallel Audiobook Corpus Treasure)
+[Treasure Island examples](https://robvanson.github.io/VowelBender/Examples/Parallel%20Audiobook%20Corpus%20Treasure/)
 
 ## Repositories
 
