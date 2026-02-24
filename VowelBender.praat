@@ -272,6 +272,7 @@ title$ = "untitled"
 gender = 1
 formant_algorithm = 1
 source_signal = 1
+output_Format$ = "WAV"
 
 # Run master loop
 .continue = 1
@@ -302,6 +303,9 @@ while .continue = 1
 			option: "Pulse Train"
 			option: "LPCerror"
 			option: "Phonation"
+		optionMenu: "Output format", 1
+			option: "WAV"
+			option: "FLAC"
 
 	.clicked = endPause: "Help", "Open", 2
 	
@@ -327,6 +331,7 @@ while .continue = 1
     a_F1fraction = a_i_F1_fraction
 	smootheningTime = smoothing_Time
 	sourceSignal$ = {"Pulse Train", "LPCerror", "Phonation"}[source_Signal]
+	output_Format$ = {"WAV", "FLAC"}[output_format]
 	
 	# Read filename
 	.fullFilename$ = chooseReadFile$: "Select a file"
@@ -357,7 +362,7 @@ while .continue = 1
 			fileInputTable = Read Table from tab-separated file: inputFile$
 	else
 		# Create file table
-		fileInputTable = Create Table with column names: "table", 1, { "Filename", "Gender", "i-F2fraction", "u-F2fraction", "a-F1fraction", "Tsmooth", "Source", "Title", "Sourcedir", "Targetdir", "Formant", "Log" }
+		fileInputTable = Create Table with column names: "table", 1, { "Filename", "Gender", "i-F2fraction", "u-F2fraction", "a-F1fraction", "Tsmooth", "Source", "Title", "Sourcedir", "Targetdir", "Formant", "Log", "OutputFormat"}
 		sourceDir$ = replace_regex$(inputFile$, "[^/\\\\]+$", "", 0)
 		inputFile$ =  replace_regex$(inputFile$, sourceDir$, "", 0)
 		Set string value: 1, "Filename", inputFile$
@@ -370,7 +375,9 @@ while .continue = 1
 		Set string value: 1, "Sourcedir", sourceDir$
 		Set string value: 1, "Targetdir", targetDir$	
 		Set string value: 1, "Formant", targetFormantAlgorithm$	
-		Set string value: 1, "Log", vowelBenderLogFile$	
+		Set string value: 1, "Log", vowelBenderLogFile$
+		Set string value: 1, "OutputFormat", output_Format$
+		
 	endif
 
 	if fileInputTable <= 0
@@ -414,6 +421,10 @@ while .continue = 1
 		outFileName$ = Get value: .f, "Title"
 		if not index_regex(outFileName$, "\S")
 			outFileName$ = title$
+		endif
+		outFormat$ = Get value: .f, "OutputFormat"
+		if index_regex(outFormat$, "\S")
+			output_Format$ = outFormat$
 		endif
 		.currentVowelBenderLogFile$ = Get value: .f, "Log"
 		if not index_regex(.currentVowelBenderLogFile$, "\S")
@@ -832,11 +843,15 @@ while .continue = 1
 			endif
 			
 		else
-			.outFilePath$ = targetDir$ + outFileName$ + ".wav"
+			.outFilePath$ = targetDir$ + outFileName$
 		endif
 		
 		if .outFilePath$ <> ""
-			nowarn Save as WAV file:  .outFilePath$
+			if output_Format$ = "FLAC"
+				nowarn Save as FLAC file:  .outFilePath$ + ".flac"
+			else
+				nowarn Save as WAV file:  .outFilePath$ + ".wav"
+			endif
 		endif
 		
 			
