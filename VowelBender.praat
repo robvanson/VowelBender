@@ -332,6 +332,7 @@ while .continue = 1
 	smootheningTime = smoothing_Time
 	sourceSignal$ = {"Pulse Train", "LPCerror", "Phonation"}[source_Signal]
 	output_Format$ = {"WAV", "FLAC"}[output_format]
+	outputExtension$ = "." + lowercase$(output_Format$)
 	
 	# Read filename
 	.fullFilename$ = chooseReadFile$: "Select a file"
@@ -849,8 +850,10 @@ while .continue = 1
 		if .outFilePath$ <> ""
 			if output_Format$ = "FLAC"
 				nowarn Save as FLAC file:  .outFilePath$ + ".flac"
+				outputExtension$ = ".flac"
 			else
 				nowarn Save as WAV file:  .outFilePath$ + ".wav"
+				outputExtension$ = ".wav"
 			endif
 		endif
 		
@@ -859,7 +862,7 @@ while .continue = 1
 			.vowelTriangleLog$ = replace_regex$(.currentVowelBenderLogFile$, "(?iLog)", "VowelTriangleLog", 0)
 			.rowLine$ = outFileName$+";"
 			... + gender$+";"
-			... + targetDir$ + outFileName$ + ".wav"+";"
+			... + targetDir$ + outFileName$ + outputExtension$+";"
 			... + "EN" + ";" 
 			... + targetDir$ + outFileName$ + ".png" + ";"
 			... + date$() + ";"
