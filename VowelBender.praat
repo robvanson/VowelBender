@@ -384,7 +384,7 @@ while .continue = 1
 	if fileInputTable <= 0
 		exit: "No input"
 	else
-		cols$# = { "Filename", "Gender", "i-F2fraction", "u-F2fraction", "a-F1fraction", "Tsmooth", "Source", "Title", "Sourcedir", "Targetdir", "Formant", "Log", "Format" }
+		cols$# = { "Filename", "Gender", "i-F2fraction", "u-F2fraction", "a-F1fraction", "Tsmooth", "Source", "Title", "Sourcedir", "Targetdir", "Formant", "Log", "Format",  "OutputFormat"}
 		numCols = size(cols$#)
 		for .c to numCols
 			selectObject: fileInputTable
