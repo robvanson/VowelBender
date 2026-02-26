@@ -332,7 +332,7 @@ while .continue = 1
 	smootheningTime = smoothing_Time
 	sourceSignal$ = {"Pulse Train", "LPCerror", "Phonation"}[source_Signal]
 	output_Format$ = {"WAV", "FLAC"}[output_format]
-	outputExtension$ = "." + lowercase$(output_Format$)
+	outputExtension$ = "." + replace_regex$(output_Format$, ".+", "\L&", 0)
 	
 	# Read filename
 	.fullFilename$ = chooseReadFile$: "Select a file"
@@ -439,7 +439,7 @@ while .continue = 1
 		
 		if writeLog and .currentVowelBenderLogFile$ <> ""
 			if not fileReadable (.currentVowelBenderLogFile$)
-				writeFileLine: .currentVowelBenderLogFile$, "Title;Speaker;File;Language;Plotfile;date;i-fraction;u-fraction;a-fraction;T-smooth;Source;Formant;Log"
+				writeFileLine: .currentVowelBenderLogFile$, "Title;Speaker;File;Language;Plotfile;date;i-fraction;u-fraction;a-fraction;T-smooth;Source;Formant;Log;meanF1-st;sdF1-st;meanF2-st;sdF2-st"
 			endif
 		endif
 
@@ -816,6 +816,30 @@ while .continue = 1
 				Set part to zero: .start, .end, "at exactly these times"
 			endif
 		endfor
+		
+		# Get formant mean and sd
+		selectObject: recombinedHighLow
+		if .currentFormantAlgorithm$ = "Robust"
+			.vowelFormants = noprogress To Formant (robust): timeStep, 5, sampleFreq/2, 0.025, preEmphasisFreq, 1.5, 5, 1e-06
+		elsif .currentFormantAlgorithm$ = "FormantPath"
+			.vowelFormants = noprogress To FormantPath: timeStep, 5, sampleFreq/2, 0.025, preEmphasisFreq, "Burg", 0.05, 4, 1e-06, 1e-06, 1.5, 5, 1e-06, "no"
+		else
+			.vowelFormants = noprogress To Formant (burg): timeStep, 5, sampleFreq/2, 0.025, preEmphasisFreq
+		endif
+		selectObject: .vowelFormants
+		.matrixF1 = To Matrix: 1
+		Formula: "hertzToSemitones(self)"
+		.meanF1 = Get mean: 0, 0, 0, 0
+		.sdF1 = Get standard deviation: 0, 0, 0, 0
+		selectObject: .vowelFormants
+		.matrixF2 = To Matrix: 2
+		Formula: "hertzToSemitones(self)"
+		.meanF2 = Get mean: 0, 0, 0, 0
+		.sdF2 = Get standard deviation: 0, 0, 0, 0
+		
+		selectObject: .vowelFormants, .matrixF1, .matrixF2
+		Remove
+		
 		selectObject: recombinedHighLow, recordingMono
 		stereoFinalSound = Combine to stereo
 		Rename: "StereoFinalSound"
@@ -829,7 +853,7 @@ while .continue = 1
 		selectObject: finalSound
 		if not index_regex(targetDir$, "\S")
 			label ASKFOROUTPUTFILENAME
-			.outFilePath$ = chooseWriteFile$: "Save as WAV file", outFileName$ + ".wav"
+			.outFilePath$ = chooseWriteFile$: "Save as "+ output_Format$ +" file", outFileName$
 			 
 			if .outFilePath$ = ""
 				# Ready or not?
@@ -872,7 +896,12 @@ while .continue = 1
 			... + fixed$(.smootheningTime,3) + ";"
 			... + sourceSignal$ + ";"
 			... + .currentFormantAlgorithm$ + ";"
-			... + .vowelTriangleLog$
+			... + .vowelTriangleLog$ + ";"
+			... + fixed$(.meanF1, 1) + ";"
+			... + fixed$(.sdF1, 1) + ";"
+			... + fixed$(.meanF2, 1) + ";"
+			... + fixed$(.sdF2, 1)
+			
 			.rowLine$ = replace$ (.rowLine$, "--undefined--", "NA", 0)
 
 			appendFileLine: .currentVowelBenderLogFile$, .rowLine$
