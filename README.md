@@ -13,6 +13,8 @@
 
 [Treasure Island examples](https://robvanson.github.io/VowelBender/Examples/Parallel%20Audiobook%20Corpus%20Treasure/)
 
+[North Wind and the Sun examples](https://robvanson.github.io/VowelBender/Examples/North%20Wind%20and%20the%20Sun/)
+
 ## Repositories
 
 *VowelBender* git repositories are available at:
