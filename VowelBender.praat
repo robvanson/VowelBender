@@ -292,7 +292,7 @@ while .continue = 1
 		optionMenu: "Formant Algorithm", formant_algorithm
 			option: "Burg"
 			option: "Robust"
-			option: "FormantPath"
+			option: "SL (Split-Levinson)"
 		comment: "Size of the thee corners of the vowel space (% of citation space)"
 		real: "i schwa F2 fraction (%)", i_F2fraction	
 		real: "u schwa F2 fraction (%)", u_F2fraction
@@ -325,7 +325,7 @@ while .continue = 1
 
 	gender$ = {"F", "M", "A"}[gender]
 	writeLog = log
-	targetFormantAlgorithm$ = {"Burg", "Robust", "FormantPath"}[ formant_algorithm]
+	targetFormantAlgorithm$ = {"Burg", "Robust", "SL"}[ formant_algorithm]
 	i_F2fraction = i_schwa_F2_fraction
 	u_F2fraction = u_schwa_F2_fraction
     a_F1fraction = a_i_F1_fraction
@@ -436,6 +436,10 @@ while .continue = 1
 		if not index_regex(.currentFormantAlgorithm$, "\S")
 			.currentFormantAlgorithm$ = targetFormantAlgorithm$
 		endif
+		.phonemeFormantAlgorithm$ = .currentFormantAlgorithm$
+		if .phonemeFormantAlgorithm$ = "SL"
+			.phonemeFormantAlgorithm$ = "Burg"
+		endif
 		
 		if writeLog and .currentVowelBenderLogFile$ <> ""
 			if not fileReadable (.currentVowelBenderLogFile$)
@@ -470,18 +474,18 @@ while .continue = 1
 			preEmphasisFreq = 50
 		endif
 		
-		i_low = phonemes [.currentFormantAlgorithm$, gender$, "i", "F1"]
+		i_low = phonemes [.phonemeFormantAlgorithm$, gender$, "i", "F1"]
 		i_high = 0
 		if .i_F2fraction != 0
-			i_high = semitonesToHertz (.i_F2fraction * (hertzToSemitones (phonemes [.currentFormantAlgorithm$, gender$, "i", "F2"]) - hertzToSemitones (phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"]) ) + hertzToSemitones (phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"]) )
+			i_high = semitonesToHertz (.i_F2fraction * (hertzToSemitones (phonemes [.phonemeFormantAlgorithm$, gender$, "i", "F2"]) - hertzToSemitones (phonemes [.phonemeFormantAlgorithm$, gender$, "@", "F2"]) ) + hertzToSemitones (phonemes [.phonemeFormantAlgorithm$, gender$, "@", "F2"]) )
 		endif
 		u_low = 0
 		 if  .u_F2fraction != 0
-			u_low  =  semitonesToHertz (.u_F2fraction * (hertzToSemitones (phonemes [.currentFormantAlgorithm$, gender$, "u", "F2"]) - hertzToSemitones (phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"]) ) + hertzToSemitones (phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"] ) )
+			u_low  =  semitonesToHertz (.u_F2fraction * (hertzToSemitones (phonemes [.phonemeFormantAlgorithm$, gender$, "u", "F2"]) - hertzToSemitones (phonemes [.phonemeFormantAlgorithm$, gender$, "@", "F2"]) ) + hertzToSemitones (phonemes [.phonemeFormantAlgorithm$, gender$, "@", "F2"] ) )
 		endif
 		a_max = 0
 		if .a_F1fraction != 0
-			a_max  =  semitonesToHertz (.a_F1fraction * (hertzToSemitones (phonemes [.currentFormantAlgorithm$, gender$, "a", "F1"] )  - hertzToSemitones (i_low) ) + hertzToSemitones ( i_low ) ) 
+			a_max  =  semitonesToHertz (.a_F1fraction * (hertzToSemitones (phonemes [.phonemeFormantAlgorithm$, gender$, "a", "F1"] )  - hertzToSemitones (i_low) ) + hertzToSemitones ( i_low ) ) 
 		endif
 
 		# Fractions can be negative, and result in reversed F2 limits, correct them
@@ -504,8 +508,8 @@ while .continue = 1
 		openShift = 0
 		openFactor = 1
 		if a_max > 0
-			openShift = a_max - phonemes [.currentFormantAlgorithm$, gender$, "A", "F1"]
-			openFactor = (a_max - i_low) / (phonemes [.currentFormantAlgorithm$, gender$, "A", "F1"] - i_low)
+			openShift = a_max - phonemes [.phonemeFormantAlgorithm$, gender$, "A", "F1"]
+			openFactor = (a_max - i_low) / (phonemes [.phonemeFormantAlgorithm$, gender$, "A", "F1"] - i_low)
 		endif
 		
 		#Start
@@ -535,11 +539,11 @@ while .continue = 1
 		# Calculate formants
 		selectObject: original
 		if .currentFormantAlgorithm$ = "Robust"
-			formants = noprogress To Formant (robust): timeStep, 5, sampleFreq/2, 0.025, preEmphasisFreq, 1.5, 5, 1e-06
+			formants = noprogress To Formant (robust): timeStep, 5, sampleFreq/2, 0.025, preEmphasisFreq, 1.5, 5, 0.000001
 			selectObject: original
 			formantsBandwidth = noprogress To Formant (burg): timeStep, 5, sampleFreq/2, 0.025, preEmphasisFreq
-		elsif .currentFormantAlgorithm$ = "FormantPath"
-			formants = noprogress To FormantPath: timeStep, 5, sampleFreq/2, 0.025, preEmphasisFreq, "Burg", 0.05, 4, 1e-06, 1e-06, 1.5, 5, 1e-06, "no"
+		elsif .currentFormantAlgorithm$ = "SL"
+			formants = noprogress To Formant (sl): timeStep, 5, sampleFreq/2, 0.025, preEmphasisFreq
 			selectObject: original
 			formantsBandwidth = noprogress To Formant (burg): timeStep, 5, sampleFreq/2, 0.025, preEmphasisFreq
 		else
@@ -615,14 +619,14 @@ while .continue = 1
 		formantGrid = Down to FormantGrid
 		formantGridFormula1 = Copy: "formantGridFormula1"
 		if .u_F2fraction > 100
-			schwaF2 = phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"]
+			schwaF2 = phonemes [.phonemeFormantAlgorithm$, gender$, "@", "F2"]
 			Formula (frequencies): "if row = 2 then if self < schwaF2 then schwaF2 + (self - schwaF2) * .u_F2fraction else self fi else self fi"
 		else
 			Formula (frequencies): "if row = 2 then if self < u_low then u_low else self fi else self fi"
 		endif
 		formantGridFormula2 = Copy: "formantGridFormula2"
 		if .i_F2fraction > 100
-			schwaF2 = phonemes [.currentFormantAlgorithm$, gender$, "@", "F2"]
+			schwaF2 = phonemes [.phonemeFormantAlgorithm$, gender$, "@", "F2"]
 			Formula (frequencies): "if row = 2 then if self > schwaF2 then schwaF2 + (self - schwaF2) * .i_F2fraction else self fi else self fi"
 		else
 			Formula (frequencies): "if row = 2 then if self > i_high then i_high else self fi else self fi"
@@ -820,9 +824,9 @@ while .continue = 1
 		# Get formant mean and sd
 		selectObject: recombinedHighLow
 		if .currentFormantAlgorithm$ = "Robust"
-			.vowelFormants = noprogress To Formant (robust): timeStep, 5, sampleFreq/2, 0.025, preEmphasisFreq, 1.5, 5, 1e-06
-		elsif .currentFormantAlgorithm$ = "FormantPath"
-			.vowelFormants = noprogress To FormantPath: timeStep, 5, sampleFreq/2, 0.025, preEmphasisFreq, "Burg", 0.05, 4, 1e-06, 1e-06, 1.5, 5, 1e-06, "no"
+			.vowelFormants = noprogress To Formant (robust): timeStep, 5, sampleFreq/2, 0.025, preEmphasisFreq, 1.5, 5, 0.000001
+		elsif .currentFormantAlgorithm$ = "SL"
+			.vowelFormants = noprogress To Formant (sl): timeStep, 5, sampleFreq/2, 0.025, preEmphasisFreq
 		else
 			.vowelFormants = noprogress To Formant (burg): timeStep, 5, sampleFreq/2, 0.025, preEmphasisFreq
 		endif
