@@ -303,6 +303,7 @@ while .continue = 1
 			option: "Pulse Train"
 			option: "LPCerror"
 			option: "Phonation"
+			option: "Deemp Pulse"
 		optionMenu: "Output format", 1
 			option: "WAV"
 			option: "FLAC"
@@ -330,7 +331,7 @@ while .continue = 1
 	u_F2fraction = u_schwa_F2_fraction
     a_F1fraction = a_i_F1_fraction
 	smootheningTime = smoothing_Time
-	sourceSignal$ = {"Pulse Train", "LPCerror", "Phonation"}[source_Signal]
+	sourceSignal$ = {"Pulse Train", "LPCerror", "Phonation", "Deemp Pulse"}[source_Signal]
 	output_Format$ = {"WAV", "FLAC"}[output_format]
 	outputExtension$ = "." + replace_regex$(output_Format$, ".+", "\L&", 0)
 	
@@ -580,6 +581,11 @@ while .continue = 1
 			# Create pulse train sound
 			selectObject: pointProcess
 			newSpeechSource = To Sound (pulse train): origSampleFreq, 1, 0.05, 2000
+		elsif sourceSignal$ = "Deemp Pulse"
+			# Create pulse train sound
+			selectObject: pointProcess
+			newSpeechSource = To Sound (pulse train): origSampleFreq, 1, 0.05, 2000
+			Filter (de-emphasis): preEmphasisFreq
 		else
 			# Create LPC error signal
 			#selectObject: recordingMono
