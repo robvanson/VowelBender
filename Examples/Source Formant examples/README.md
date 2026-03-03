@@ -8,6 +8,8 @@ University of Edinburgh. School of Informatics.
 
 Examples of re-synthesized speech using unchanged formants (*Resynthesis*). For each combination of voice sound source, i.e., *LPC error*, *Phonation*, *Pulse Train*, and *De-emphasized Pulse Train*, and formant algorithm, i.e., *Burg*, *Robust*, and *Split-Levinson*. Single utterances of a female, *mjd*, and male *apr* speaker are used.
 
+All audio files have been converted to MP3 format for storage efficiency.
+
 ## Female speaker
 
 Orignal recording: [mjd_chp19_utt030.mp3](mjd_chp19_utt030.mp3)
