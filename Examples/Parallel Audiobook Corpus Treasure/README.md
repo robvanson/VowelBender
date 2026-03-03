@@ -1,9 +1,11 @@
-From: Ribeiro, Manuel Sam. (2018).  
+# Examples of converted speech
+
+Examples from: Ribeiro, Manuel Sam. (2018).  
 Parallel Audiobook Corpus, [dataset].  
 University of Edinburgh. School of Informatics.  
 [https://doi.org/10.7488/ds/2468](https://doi.org/10.7488/ds/2468)
 
-# Original recordings
+## Original recordings
 
 | Filename                                                               | Speaker | Gender | Type |
 | -------------------------------------------------------------------- | ------- | ---------- | ------- |
@@ -143,7 +145,7 @@ University of Edinburgh. School of Informatics.
 | [rph_chp30_utt134 LPC Burg Resynthesis.flac](rph_chp30_utt134 LPC Burg Resynthesis.flac)   | rph     | M      | Resynthesis |
 | [rph_chp30_utt136 LPC Burg Resynthesis.flac](rph_chp30_utt136 LPC Burg Resynthesis.flac)   | rph     | M      | Resynthesis |
 
-# Intermediate limits to vowels
+## Intermediate limits to vowels
 
 ### (LPCerror, Burg, i: 75%, u: 1%, a: 100%, Smooth: 0.5 sec)
 
@@ -214,7 +216,7 @@ University of Edinburgh. School of Informatics.
 | [rph_chp30_utt134 LPC Burg 75-1-100-05.flac](rph_chp30_utt134 LPC Burg 75-1-100-05.flac)   | rph     | M      | Medium |
 | [rph_chp30_utt136 LPC Burg 75-1-100-05.flac](rph_chp30_utt136 LPC Burg 75-1-100-05.flac)   | rph     | M      | Medium |
 
-# Extremely changed vowels
+## Extremely distorted vowels
 
 ### (LPCerror, Burg, i: 30%, u: -20%, a: 105%, Smooth: 0.5 sec)
 
