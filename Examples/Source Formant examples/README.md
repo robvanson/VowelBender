@@ -6,7 +6,7 @@ Parallel Audiobook Corpus, [dataset].
 University of Edinburgh. School of Informatics.  
 [https://doi.org/10.7488/ds/2468](https://doi.org/10.7488/ds/2468)
 
-Examples of re-synthesized speech using unchanged formants (*Resynthesis*). For each combination of voice sound source, i.e., *LPC error*, *Phonation*, *Pulse Train*, and *De-emphasized Pulse Train*, and formant algorithm, i.e., *Burg*, *Robust*, and *Split-Levinson*. Single utterances of a female, *mjd*, and male *apr* speaker are used.
+Examples of re-synthesized speech using unchanged formants (*Resynthesis*). For each combination of voice sound source, i.e., *LPC error*, *Phonation*, *Pulse Train*, and *De-emphasized Pulse Train*, and formant algorithm, i.e., *Burg*, *Robust*, and *Split-Levinson*. Single utterances of a female, *mjd*, and male, *apr*, speaker are used.
 
 All audio files have been converted to MP3 format for storage efficiency.
 
