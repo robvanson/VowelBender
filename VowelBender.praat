@@ -239,6 +239,116 @@ phonemes ["Robust", "F", "u_corner", "F2"] = phonemes ["Robust", "F", "u", "F2"]
 phonemes ["Robust", "F", "@_center", "F1"] =(phonemes ["Robust", "F", "i_corner", "F1"]*phonemes ["Robust", "F", "u_corner", "F1"]*phonemes ["Robust", "F", "a_corner", "F1"])^(1/3)
 phonemes ["Robust", "F", "@_center", "F2"] = (phonemes ["Robust", "F", "i_corner", "F2"]*phonemes ["Robust", "F", "u_corner", "F2"]*phonemes ["Robust", "F", "a_corner", "F2"])^(1/3)
 
+
+###############################################
+#
+# Split-Levinson (SL)
+#
+###############################################
+
+# Male 
+phonemes ["SL", "M", "A", "F1"] = 696
+phonemes ["SL", "M", "A", "F2"] = 1066
+phonemes ["SL", "M", "E", "F1"] = 552
+phonemes ["SL", "M", "E", "F2"] = 1659
+phonemes ["SL", "M", "I", "F1"] = 378
+phonemes ["SL", "M", "I", "F2"] = 1869
+phonemes ["SL", "M", "O", "F1"] = 483
+phonemes ["SL", "M", "O", "F2"] = 726
+phonemes ["SL", "M", "Y", "F1"] = 418
+phonemes ["SL", "M", "Y", "F2"] = 1455
+phonemes ["SL", "M", "Y:", "F1"] = 386
+phonemes ["SL", "M", "Y:", "F2"] = 1492
+phonemes ["SL", "M", "a", "F1"] = 789
+phonemes ["SL", "M", "a", "F2"] = 1291
+phonemes ["SL", "M", "au", "F1"] = 584
+phonemes ["SL", "M", "au", "F2"] = 959
+phonemes ["SL", "M", "e", "F1"] = 372
+phonemes ["SL", "M", "e", "F2"] = 1960
+phonemes ["SL", "M", "ei", "F1"] = 500
+phonemes ["SL", "M", "ei", "F2"] = 1733
+phonemes ["SL", "M", "i", "F1"] = 260
+phonemes ["SL", "M", "i", "F2"] = 1972
+phonemes ["SL", "M", "o", "F1"] = 427
+phonemes ["SL", "M", "o", "F2"] = 744
+phonemes ["SL", "M", "u", "F1"] = 288
+phonemes ["SL", "M", "u", "F2"] = 666
+phonemes ["SL", "M", "ui", "F1"] = 495
+phonemes ["SL", "M", "ui", "F2"] = 1469
+phonemes ["SL", "M", "y", "F1"] = 268
+phonemes ["SL", "M", "y", "F2"] = 1581
+# Guessed
+phonemes ["SL", "M", "@", "F1"] = 417.7000
+phonemes ["SL", "M", "@", "F2"] = 1455.100
+
+# Female 
+phonemes ["SL", "F", "A", "F1"] = 818
+phonemes ["SL", "F", "A", "F2"] = 1197
+phonemes ["SL", "F", "E", "F1"] = 668
+phonemes ["SL", "F", "E", "F2"] = 1748
+phonemes ["SL", "F", "I", "F1"] = 429
+phonemes ["SL", "F", "I", "F2"] = 1937
+phonemes ["SL", "F", "O", "F1"] = 571
+phonemes ["SL", "F", "O", "F2"] = 882
+phonemes ["SL", "F", "Y", "F1"] = 496
+phonemes ["SL", "F", "Y", "F2"] = 1636
+phonemes ["SL", "F", "Y:", "F1"] = 431
+phonemes ["SL", "F", "Y:", "F2"] = 1695
+phonemes ["SL", "F", "a", "F1"] = 854
+phonemes ["SL", "F", "a", "F2"] = 1436
+phonemes ["SL", "F", "au", "F1"] = 648
+phonemes ["SL", "F", "au", "F2"] = 1057
+phonemes ["SL", "F", "e", "F1"] = 430
+phonemes ["SL", "F", "e", "F2"] = 1862
+phonemes ["SL", "F", "ei", "F1"] = 620
+phonemes ["SL", "F", "ei", "F2"] = 1718
+phonemes ["SL", "F", "i", "F1"] = 294
+phonemes ["SL", "F", "i", "F2"] = 1855
+phonemes ["SL", "F", "o", "F1"] = 528
+phonemes ["SL", "F", "o", "F2"] = 894
+phonemes ["SL", "F", "u", "F1"] = 376
+phonemes ["SL", "F", "u", "F2"] = 735
+phonemes ["SL", "F", "ui", "F1"] = 613
+phonemes ["SL", "F", "ui", "F2"] = 1559
+phonemes ["SL", "F", "y", "F1"] = 321
+phonemes ["SL", "F", "y", "F2"] = 1742
+# Guessed
+phonemes ["SL", "F", "@", "F1"] = 500.5
+phonemes ["SL", "F", "@", "F2"] = 1706.6
+
+# Triangle
+# Male 
+phonemes ["SL", "M", "i_corner", "F1"] = phonemes ["SL", "M", "i", "F1"]/(2^(1/12))
+phonemes ["SL", "M", "i_corner", "F2"] = phonemes ["SL", "M", "i", "F2"]*(2^(1/12))
+phonemes ["SL", "M", "a_corner", "F1"] = phonemes ["SL", "M", "a", "F1"]*(2^(1/12))
+phonemes ["SL", "M", "a_corner", "F2"] = phonemes ["SL", "M", "a", "F2"]
+phonemes ["SL", "M", "u_corner", "F1"] = phonemes ["SL", "M", "u", "F1"]/(2^(1/12))
+phonemes ["SL", "M", "u_corner", "F2"] = phonemes ["SL", "M", "u", "F2"]/(2^(1/12))
+# @_center is not fixed but derived from current corners
+phonemes ["SL", "M", "@_center", "F1"] =(phonemes ["SL", "M", "i_corner", "F1"]*phonemes ["SL", "M", "u_corner", "F1"]*phonemes ["SL", "M", "a_corner", "F1"])^(1/3)
+phonemes ["SL", "M", "@_center", "F2"] = (phonemes ["SL", "M", "i_corner", "F2"]*phonemes ["SL", "M", "u_corner", "F2"]*phonemes ["SL", "M", "a_corner", "F2"])^(1/3)
+
+# Female 
+phonemes ["SL", "F", "i_corner", "F1"] = phonemes ["SL", "F", "i", "F1"]/(2^(1/12))
+phonemes ["SL", "F", "i_corner", "F2"] = phonemes ["SL", "F", "i", "F2"]*(2^(1/12))
+phonemes ["SL", "F", "a_corner", "F1"] = phonemes ["SL", "F", "a", "F1"]*(2^(1/12))
+phonemes ["SL", "F", "a_corner", "F2"] = phonemes ["SL", "F", "a", "F2"]
+phonemes ["SL", "F", "u_corner", "F1"] = phonemes ["SL", "F", "u", "F1"]/(2^(1/12))
+phonemes ["SL", "F", "u_corner", "F2"] = phonemes ["SL", "F", "u", "F2"]/(2^(1/12))
+# @_center is not fixed but derived from current corners
+phonemes ["SL", "F", "@_center", "F1"] =(phonemes ["SL", "F", "i_corner", "F1"]*phonemes ["SL", "F", "u_corner", "F1"]*phonemes ["SL", "F", "a_corner", "F1"])^(1/3)
+phonemes ["SL", "F", "@_center", "F2"] = (phonemes ["SL", "F", "i_corner", "F2"]*phonemes ["SL", "F", "u_corner", "F2"]*phonemes ["SL", "F", "a_corner", "F2"])^(1/3)
+
+# Vocal Tract Length
+# Sex  VTL		Phi
+# F    15.94	553.52
+# M    17.11	516.05
+averagePhi_VTL ["SL", "F"] = 553.52
+averagePhi_VTL ["SL", "M"] = 516.05
+# Classification boundary
+averagePhi_VTL ["SL", "A"] = 529.80
+
+
 #####################################
 
 # Timestep in seconds
@@ -438,9 +548,6 @@ while .continue = 1
 			.currentFormantAlgorithm$ = targetFormantAlgorithm$
 		endif
 		.phonemeFormantAlgorithm$ = .currentFormantAlgorithm$
-		if .phonemeFormantAlgorithm$ = "SL"
-			.phonemeFormantAlgorithm$ = "Burg"
-		endif
 		
 		if writeLog and .currentVowelBenderLogFile$ <> ""
 			if not fileReadable (.currentVowelBenderLogFile$)
