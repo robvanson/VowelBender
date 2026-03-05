@@ -584,10 +584,12 @@ while .continue = 1
 		elsif sourceSignal$ = "Deemp Pulse"
 			# Create pulse train sound
 			selectObject: pointProcess
-			newSpeechSource = To Sound (pulse train): origSampleFreq, 1, 0.05, 2000
-			Filter (de-emphasis): preEmphasisFreq
+			tmp = To Sound (pulse train): origSampleFreq, 1, 0.05, 2000
+			newSpeechSource = Filter (de-emphasis): preEmphasisFreq
+			selectObject: tmp
+			Remove
 		else
-			# Create LPC error signal
+			# Create LPC error signal (recording Mono is the full recording, original is the downsampled recording
 			#selectObject: recordingMono
 			selectObject: original
 			
