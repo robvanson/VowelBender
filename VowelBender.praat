@@ -474,7 +474,7 @@ while .continue = 1
 			fileInputTable = Read Table from tab-separated file: inputFile$
 	else
 		# Create file table
-		fileInputTable = Create Table with column names: "table", 1, { "Filename", "Gender", "i-F2fraction", "u-F2fraction", "a-F1fraction", "Tsmooth", "Source", "Title", "Sourcedir", "Targetdir", "Formant", "Log", "OutputFormat"}
+		fileInputTable = Create Table with column names: "table", 1, { "Filename", "Gender", "i-F2fraction", "u-F2fraction", "a-F1fraction", "Tsmooth", "Source", "Title", "Sourcedir", "Targetdir", "Formant", "Log", "OutputFormat", "Segments", "SegmentTier", "Label"}
 		sourceDir$ = replace_regex$(inputFile$, "[^/\\\\]+$", "", 0)
 		inputFile$ =  replace_regex$(inputFile$, sourceDir$, "", 0)
 		Set string value: 1, "Filename", inputFile$
@@ -489,13 +489,16 @@ while .continue = 1
 		Set string value: 1, "Formant", targetFormantAlgorithm$	
 		Set string value: 1, "Log", vowelBenderLogFile$
 		Set string value: 1, "OutputFormat", output_Format$
+		Set string value: 1, "Segments", ""
+		Set numeric value: 1, "SegmentTier", 0
+		Set string value: 1, "Label", "Vowel"
 		
 	endif
 
 	if fileInputTable <= 0
 		exit: "No input"
 	else
-		cols$# = { "Filename", "Gender", "i-F2fraction", "u-F2fraction", "a-F1fraction", "Tsmooth", "Source", "Title", "Sourcedir", "Targetdir", "Formant", "Log", "Format",  "OutputFormat"}
+		cols$# = { "Filename", "Gender", "i-F2fraction", "u-F2fraction", "a-F1fraction", "Tsmooth", "Source", "Title", "Sourcedir", "Targetdir", "Formant", "Log",  "OutputFormat", "Segments", "SegmentTier", "Label"}
 		numCols = size(cols$#)
 		for .c to numCols
 			selectObject: fileInputTable
@@ -503,7 +506,7 @@ while .continue = 1
 			colIndex = Get column index: colName$
 			if colIndex <= 0
 				Append column: colName$
-				if index_regex(colName$, "(fraction|smooth)")
+				if index_regex(colName$, "(fraction|smooth|SegmentTier)")
 					Formula: colName$, "0"
 				else
 					Formula: colName$, "tab$"
@@ -548,6 +551,10 @@ while .continue = 1
 			.currentFormantAlgorithm$ = targetFormantAlgorithm$
 		endif
 		.phonemeFormantAlgorithm$ = .currentFormantAlgorithm$
+		
+		.currentTextGridPath$ = Get value: .f, "Segments"
+		.currentVowelTier = Get value: .f, "SegmentTier"
+		.currentLabel$ = Get value: .f, "Label"
 		
 		if writeLog and .currentVowelBenderLogFile$ <> ""
 			if not fileReadable (.currentVowelBenderLogFile$)
@@ -661,22 +668,39 @@ while .continue = 1
 		selectObject: formants
 		Rename: "OriginalFormants"
 		
-		call segment_syllables -25 4 0.3 1 original
-		.syllableKernels = segment_syllables.textgridid
-		@select_vowel_target: gender$, original, formants, formantsBandwidth, .syllableKernels
-		.vowelTier = select_vowel_target.vowelTier
-		.targetTier = select_vowel_target.targetTier
-		selectObject: .syllableKernels
-		vowelGrid = Extract one tier: .vowelTier
+		# Get vowel segments
+		if index_regex(.currentTextGridPath$, "\S")
+			if not fileReadable(.currentTextGridPath$)
+				exitScript: "File not readable: ", .currentTextGridPath$
+			endif
+			.tmp = Read from file: .currentTextGridPath$
+			.vowelTier = max(1, .currentVowelTier)
+			vowelGrid = Extract one tier: .vowelTier
+			selectObject: .tmp
+			Remove
+		else
+			call segment_syllables -25 4 0.3 1 original
+			.syllableKernels = segment_syllables.textgridid
+			@select_vowel_target: gender$, original, formants, formantsBandwidth, .syllableKernels
+			.vowelTier = select_vowel_target.vowelTier
+			.targetTier = select_vowel_target.targetTier
+			selectObject: .syllableKernels
+			vowelGrid = Extract one tier: .vowelTier
+			.currentLabel$ = "Vowel"
+			selectObject: .syllableKernels
+			Remove
+		endif
+		
+		selectObject: vowelGrid
 		.numIntervals = Get number of intervals: 1
 		for .int to .numIntervals
 			selectObject: vowelGrid
 			.label$ = Get label of interval: 1, .int
-			if .label$ <> "Vowel"
+			if .label$ <> .currentLabel$
 				Set interval text: 1, .int, "U"
 			endif
 		endfor
-		selectObject: formantsBandwidth, .syllableKernels
+		selectObject: formantsBandwidth
 		Remove
 		
 		# Manipulate formants
@@ -783,7 +807,7 @@ while .continue = 1
 			for .i to numIntervals
 				selectObject: vowelGrid
 				.vowelSegment$ = Get label of interval: 1, .i
-				if .vowelSegment$ = "Vowel"
+				if .vowelSegment$ = .currentLabel$
 					.start = Get start time of interval: 1, .i
 					.end = Get end time of interval: 1, .i
 					selectObject: formants5
@@ -927,7 +951,7 @@ while .continue = 1
 			.start = Get start time of interval: 1, .i
 			.end = Get end time of interval: 1, .i
 
-			if .vowelSegment$ = "Vowel"
+			if .vowelSegment$ = .currentLabel$
 				selectObject: recordingMono
 				Set part to zero: .start, .end, "at exactly these times"
 			else
