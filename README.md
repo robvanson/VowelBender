@@ -17,7 +17,7 @@
 
 [All sources and formant algorithms](https://robvanson.github.io/VowelBender/Examples/Source%20Formant%20examples) 
 
-[Conversions from Labeled Speech (vowels only)](https://robvanson.github.io/VowelBender/Labeled%20Speech) 
+[Conversions from Labeled Speech (vowels only)](https://robvanson.github.io/VowelBender/Examples/Labeled%20Speech) 
 
 ## Repositories
 
