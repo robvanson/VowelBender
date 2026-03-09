@@ -37,6 +37,9 @@ targetFormantAlgorithm$ = "Robust"
 vowelBenderLogFile$ = "./VowelBenderLog.csv"
 writeLog = 1
 
+# Relative amplification of synthesized fragments (currently 0)
+synthAmplification = 0
+
 ###############################################
 #
 # Burg's method formant algorithm (Burg)
@@ -696,13 +699,13 @@ while .continue = 1
 		for .int to .numIntervals
 			selectObject: vowelGrid
 			.label$ = Get label of interval: 1, .int
-			if .label$ <> .currentLabel$
-				Set interval text: 1, .int, "U"
+			if not index_regex(.label$, .currentLabel$)
+				Set interval text: 1, .int, ""
 			endif
 		endfor
 		selectObject: formantsBandwidth
 		Remove
-		
+
 		# Manipulate formants
 		if sourceSignal$ = "Phonation"	
 			# Create phonation sound
@@ -807,7 +810,7 @@ while .continue = 1
 			for .i to numIntervals
 				selectObject: vowelGrid
 				.vowelSegment$ = Get label of interval: 1, .i
-				if .vowelSegment$ = .currentLabel$
+				if index_regex(.vowelSegment$, .currentLabel$)
 					.start = Get start time of interval: 1, .i
 					.end = Get end time of interval: 1, .i
 					selectObject: formants5
@@ -849,7 +852,7 @@ while .continue = 1
 		for .i to numIntervals - 1
 			selectObject: vowelGrid
 			.vowelSegment$ = Get label of interval: 1, .i
-			if .vowelSegment$ = "U"
+			if not index_regex(.vowelSegment$, .currentLabel$)
 				.start = Get start time of interval: 1, .i
 				.end = Get end time of interval: 1, .i
 				.currenIntroWindow = min(introWindow, .end - .start)
@@ -892,9 +895,9 @@ while .continue = 1
 		# Resynthesize speech from original formants
 		selectObject: formantGrid
 		plusObject: newSpeechSource
-		reconstructedSpeech = Filter
-		Scale intensity: 70
-		Rename: "ReconstructedSpeech"
+		#reconstructedSpeech = Filter
+		#Scale intensity: 70
+		#Rename: "ReconstructedSpeech"
 		#	nowarn Save as WAV file: targetDir$ + "Reconstructed" + string$(sampleFreq) + "_" + filename$ + ".wav"
 		
 		# Resynthesize speech from altered formants
@@ -925,7 +928,8 @@ while .continue = 1
 		selectObject: reshapedSpeech
 		reshapedLowPass = Filter (pass Hann band): 200, 3000, 100
 		Rename: "ReshapedLowPass"
-		Scale intensity: originalLowPassInt
+		# Possible to adapt intensity of manipulated speech
+		Scale intensity: originalLowPassInt +  synthAmplification
 		
 		# Recombine
 		selectObject: originalHighPass, reshapedLowPass
@@ -951,7 +955,7 @@ while .continue = 1
 			.start = Get start time of interval: 1, .i
 			.end = Get end time of interval: 1, .i
 
-			if .vowelSegment$ = .currentLabel$
+			if index_regex(.vowelSegment$, .currentLabel$)
 				selectObject: recordingMono
 				Set part to zero: .start, .end, "at exactly these times"
 			else
@@ -988,6 +992,7 @@ while .continue = 1
 		Rename: "StereoFinalSound"
 		finalSound = Convert to mono
 		Rename: "FinalSound"
+		Scale intensity: 70
 		
 		if outFileName$ = "untitled" or not index_regex(outFileName$, "\S")
 			outFileName$ = filename$ + "_" + "i-"+ fixed$(100*.i_F2fraction, 0) + "_" + "u-"+ fixed$(100*.u_F2fraction, 0) + "_" + "a-"+ fixed$(100*.a_F1fraction, 0) + "_Smooth-" + fixed$(.smootheningTime,3) + "_" + sourceSignal$
@@ -1056,7 +1061,8 @@ while .continue = 1
 		label CLEANUP
 		selectObject: recordingMono, original, formantGrid, formantGridFormula1,formantGridFormula2
 		plusObject: formantGridFormula3, formantGridFormula4
-		plusObject: reconstructedSpeech, reshapedSpeech, newSpeechSource, recombinedHighLow
+		plusObject: reshapedSpeech, newSpeechSource, recombinedHighLow
+		# plusObject: reconstructedSpeech
 		plusObject: pointProcess, vowelGrid, stereoFinalSound, finalSound
 		Remove
 
