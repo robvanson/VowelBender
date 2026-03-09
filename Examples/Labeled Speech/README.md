@@ -5,7 +5,7 @@ A sentence from the Dutch reading of "The North Wind and the Sun":
 "De noordenwind begon toen uit alle macht te blazen, maar hoe harder hij blies, des te dichter trok de reiziger zijn mantel om zich heen; en ten lange leste gaf de noordenwind het op."
 (English: Then the North Wind blew as hard as he could, but the more he blew, the more closely did the traveller fold his cloak around him; and at last the North Wind gave up the attempt.)
 
-IPA: / də ˈnoːrdəʋɪnt bəˈɣɔn tun ˈœɪ̯t ˈɑlə ˈmɑxt tə ˈblaːzən mɑr hu ˈhɑrdər hɛi ˈblis dɛs tə ˈdɪxtər trʊk də ˈreːzɪɣər zɛi̯n ˈmɑntəl ɔm zɪx̯ ˈheːn ɛn tɛn ˈlɑŋə ˈlɛstə ɣaːf də ˈnoːrdəʋɪnt hɛt ˈɔp /
+IPA: / də ˈnoːrdəʋɪnt bəˈɣɔn tun ˈœɪt ˈɑlə ˈmɑxt tə ˈblaːzən mɑr hu ˈhɑrdər hɛi ˈblis dɛs tə ˈdɪxtər trʊk də ˈreːzɪɣər zɛin ˈmɑntəl ɔm zɪx ˈheːn ɛn tɛn ˈlɑŋə ˈlɛstə ɣaːf də ˈnoːrdəʋɪnt hɛt ˈɔp /
 
 SAMPA:  \[ d@ nord@wInt b@xOn tun Y+t Al@mAxt t@ blaz@n mar hu hArd@r hE+ blis dEst@ dIxt@r trOk d@ rE+z@x@r zE+n mAnt@l Om zIx hen En tEn lAN@ lEst@ xAf d@ nord@wInt @t Op \]
 
