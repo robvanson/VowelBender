@@ -1,7 +1,6 @@
 # Examples using hand labeled vowel segmentation
 
 A sentence from the Dutch reading of "The North Wind and the Sun": 
-
 "De noordenwind begon toen uit alle macht te blazen, maar hoe harder hij blies, des te dichter trok de reiziger zijn mantel om zich heen; en ten lange leste gaf de noordenwind het op."
 (English: Then the North Wind blew as hard as he could, but the more he blew, the more closely did the traveller fold his cloak around him; and at last the North Wind gave up the attempt.)
 
@@ -21,7 +20,9 @@ Speech samples (converted to MP3):
 | M | [M40K1FT1E_fm.mp3](M40K1FT1E_fm.mp3) | [M40K1FT1E DePulse Burg Resynthesis.mp3](M40K1FT1E DePulse Burg Resynthesis.mp3) | [M40K1FT1E DePulse Burg 30--20-105-0.5.mp3](M40K1FT1E DePulse Burg 30--20-105-0.5.mp3) |
 | M | [M56H1FT1E_fm.mp3](M56H1FT1E_fm.mp3) | [M56H1FT1E DePulse Burg Resynthesis.mp3](M56H1FT1E DePulse Burg Resynthesis.mp3) | [M56H1FT1E DePulse Burg 30--20-105-0.5.mp3](M56H1FT1E DePulse Burg 30--20-105-0.5.mp3) |
 
-All audio files have been converted to MP3 format for storage efficiency.
+All audio files have been converted to MP3 format for storage efficiency. 
+Resynthesis setting: De-emphasized Pulse Train, Burg
+Strong distortion uses settings: De-emphasized Pulse Train, Burg, i: 30%, u: -20%, a: 105%, Smooth: 0.5 sec
 
 Originals from:
 van Son RJJH. The IFA Spoken Language Corpus [Internet]. 

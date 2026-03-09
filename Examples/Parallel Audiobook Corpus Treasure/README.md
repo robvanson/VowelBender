@@ -7,8 +7,8 @@ University of Edinburgh. School of Informatics.
 
 ## Original recordings
 
-| Filename                                                               | Speaker | Gender | Type |
-| -------------------------------------------------------------------- | ------- | ---------- | ------- |
+| Filename                                         | Speaker | Gender | Type     |
+| ------------------------------------------------ | ------- | ------ | -------- |
 | [afo_chp27_utt031.flac](afo_chp27_utt031.flac)   | afo     | M      | Original |
 | [afo_chp27_utt033.flac](afo_chp27_utt033.flac)   | afo     | M      | Original |
 | [afo_chp27_utt034.flac](afo_chp27_utt034.flac)   | afo     | M      | Original |
@@ -78,8 +78,8 @@ University of Edinburgh. School of Informatics.
 
 ### (LPCerror, Burg)
 
-| Filename                                                                                   | Speaker | Gender  | Type |
-| ------------------------------------------------------------------------------------------ | ------- | ------ | ------- |
+| Filename                                                                                   | Speaker | Gender | Type        |
+| ------------------------------------------------------------------------------------------ | ------- | ------ | ----------- |
 | [afo_chp27_utt031 LPC Burg Resynthesis.flac](afo_chp27_utt031 LPC Burg Resynthesis.flac)   | afo     | M      | Resynthesis |
 | [afo_chp27_utt033 LPC Burg Resynthesis.flac](afo_chp27_utt033 LPC Burg Resynthesis.flac)   | afo     | M      | Resynthesis |
 | [afo_chp27_utt034 LPC Burg Resynthesis.flac](afo_chp27_utt034 LPC Burg Resynthesis.flac)   | afo     | M      | Resynthesis |
@@ -145,12 +145,12 @@ University of Edinburgh. School of Informatics.
 | [rph_chp30_utt134 LPC Burg Resynthesis.flac](rph_chp30_utt134 LPC Burg Resynthesis.flac)   | rph     | M      | Resynthesis |
 | [rph_chp30_utt136 LPC Burg Resynthesis.flac](rph_chp30_utt136 LPC Burg Resynthesis.flac)   | rph     | M      | Resynthesis |
 
-## Intermediate limits to vowels
+## Medium distortion
 
 ### (LPCerror, Burg, i: 75%, u: 1%, a: 100%, Smooth: 0.5 sec)
 
-| Filename                                                                                         | Speaker | Gender | Type |
-| ------------------------------------------------------------------------------------------ | ------- | ---------- | ------- |
+| Filename                                                                                   | Speaker | Gender | Type   |
+| ------------------------------------------------------------------------------------------ | ------- | ------ | ------ |
 | [afo_chp27_utt031 LPC Burg 75-1-100-05.flac](afo_chp27_utt031 LPC Burg 75-1-100-05.flac)   | afo     | M      | Medium |
 | [afo_chp27_utt033 LPC Burg 75-1-100-05.flac](afo_chp27_utt033 LPC Burg 75-1-100-05.flac)   | afo     | M      | Medium |
 | [afo_chp27_utt034 LPC Burg 75-1-100-05.flac](afo_chp27_utt034 LPC Burg 75-1-100-05.flac)   | afo     | M      | Medium |
@@ -216,12 +216,12 @@ University of Edinburgh. School of Informatics.
 | [rph_chp30_utt134 LPC Burg 75-1-100-05.flac](rph_chp30_utt134 LPC Burg 75-1-100-05.flac)   | rph     | M      | Medium |
 | [rph_chp30_utt136 LPC Burg 75-1-100-05.flac](rph_chp30_utt136 LPC Burg 75-1-100-05.flac)   | rph     | M      | Medium |
 
-## Extremely distorted vowels
+## Strong distortion
 
 ### (LPCerror, Burg, i: 30%, u: -20%, a: 105%, Smooth: 0.5 sec)
 
-| Filename                                                                                             | Speaker | Gender | Type |
-| ------------------------------------------------------------------------------------------------ | ------- | ------- |  ------- | 
+| Filename                                                                                         | Speaker | Gender | Type   |
+| ------------------------------------------------------------------------------------------------ | ------- | ------ | ------ |
 | [afo_chp27_utt031 LPC Burg 30--20-105-0.5.flac](afo_chp27_utt031 LPC Burg 30--20-105-0.5.flac)   | afo     | M      | Strong |
 | [afo_chp27_utt033 LPC Burg 30--20-105-0.5.flac](afo_chp27_utt033 LPC Burg 30--20-105-0.5.flac)   | afo     | M      | Strong |
 | [afo_chp27_utt034 LPC Burg 30--20-105-0.5.flac](afo_chp27_utt034 LPC Burg 30--20-105-0.5.flac)   | afo     | M      | Strong |
