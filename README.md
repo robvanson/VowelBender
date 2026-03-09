@@ -15,7 +15,9 @@
 
 [North Wind and the Sun examples](https://robvanson.github.io/VowelBender/Examples/North%20Wind%20and%20the%20Sun/)
 
-[Source and Formant algorithm examples](https://robvanson.github.io/VowelBender/Examples/Source%20Formant%20examples) 
+[All sources and formant algorithms](https://robvanson.github.io/VowelBender/Examples/Source%20Formant%20examples) 
+
+[Conversions from Labeled Speech (vowels only)](https://robvanson.github.io/VowelBender/Labeled%20Speech) 
 
 ## Repositories
 
