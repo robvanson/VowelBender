@@ -1,0 +1,71 @@
+ManPagesTextFile
+"VowelBender Examples"
+"R.J.J.H. van Son"
+20260310
+0
+
+<intro>
+"This page provides practical usage examples for the VowelBender script. It demonstrates how to run VowelBender interactively, how to use it in batch mode, and how to interpret the results. Return to the main page via @VowelBender."
+
+<entry>
+"Example 1: Interactive use"
+
+<normal>
+"In interactive mode, you open VowelBender.praat from Praat's script menu, then select a sound file when prompted. After adjusting the deformation parameters (i-F2, u-F2, a-F1 fractions), smoothing time, and source signal, you click 'Open' to process the file."
+
+<list_item>
+"\bu Set i schwa F2 fraction to 75% for moderate front-vowel compression."
+
+<list_item>
+"\bu Set u schwa F2 fraction to 75% for moderate back-vowel compression."
+
+<list_item>
+"\bu Set a i F1 fraction to 110% to simulate increased mouth opening."
+
+<list_item>
+"\bu Choose 'Phonation' as the source signal for natural-sounding resynthesis."
+
+<normal>
+"The resynthesized file will be saved under a filename constructed from your parameters unless you provided a custom Title."
+
+<entry>
+"Example 2: Batch processing with CSV"
+
+<normal>
+"You can process many files by creating a CSV file with at least a 'Filename' column. For example:"
+
+<code>
+"Filename;Gender;i-F2fraction;u-F2fraction;a-F1fraction;Tsmooth;Source;Formant
+recording1.wav;F;75;75;110;0.25;Phonation;Robust
+recording2.wav;M;60;80;105;0.20;LPCerror;Burg"
+
+<normal>
+"Save this as VowelBenderBatch.csv, then select it in the VowelBender dialog instead of a sound file. The script will automatically generate all output files in sequence."
+
+<entry>
+"Example 3: Using a TextGrid to specify vowel segments"
+
+<normal>
+"If a TextGrid is available, include its path in the 'Segments' column of the CSV file, and specify which tier to use in 'SegmentTier'."
+
+<normal>
+"For example:"
+
+<code>
+"Filename;Segments;SegmentTier;Label
+speaker1.wav;segments_speaker1.TextGrid;2;Vowel"
+
+<normal>
+"VowelBender will then apply transformations only within the labeled vowel intervals, ensuring precise manipulation in clinical or carefully annotated data."
+
+<entry>
+"Interpreting output"
+
+<normal>
+"Each processed file may be accompanied by log entries that include mean F1 and F2 in semitones, standard deviations, and the final deformation parameters. These can be used to quantify the simulated vowel-space compression or expansion."
+
+<entry>
+"Return to main page"
+
+<normal>
+"Return to the main VowelBender manual via @VowelBender."

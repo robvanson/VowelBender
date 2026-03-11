@@ -1,6 +1,20 @@
 ManPagesTextFile
-"VowelBender" "Rob van Son" 20260209 0
-<intro> "A %%Praat% script to simulate vowel space changes after oral cancer treatment."
+"VowelBender"
+"R.J.J.H. van Son"
+20260310
+0
+
+<intro>
+"VowelBender is a Praat script for analyzing, manipulating, and resynthesizing speech in order to simulate vowel-space changes often observed after treatment for oral cancer. It reshapes the vowel triangle by modifying F1 and F2 trajectories and resynthesizes speech using a selectable excitation source."
+
+<entry>
+"How to start"
+
+<normal>
+"To run VowelBender, choose 'Praat → Open Praat script…', select the script file, and click 'Run'. The script opens an interactive dialog guiding you through the available settings. You may also use a CSV or TSV table for batch processing."
+
+<entry>
+"Interactive dialog options"
 
 <entry> "Running the script "
 <normal> "When running the script, a form will appear with the following fields:"
@@ -38,3 +52,95 @@ ManPagesTextFile
 <list_item> "\bu %%Segments%%: Path to TextGrid with segment labels that specifies which segments to convert."
 <list_item> "\bu %%SegmentTier%%: Tier number with segment labels."
 <list_item> "\bu %%Label%%: Label of segments to convert, eg, ""Vowel""."
+
+<entry> "Explanations"
+<normal>
+"The following settings are available in the dialog:"
+
+<list_item> "\bu Title: The base name for output files."
+<list_item> "\bu Gender: Select Female or Male. Determines reference formant tables and preprocessing parameters."
+<list_item> "\bu Log: If enabled, the script appends a line of parameter settings and formant statistics to a CSV log file."
+<list_item> "\bu Formant Algorithm: Choose among Burg, Robust, or Split-Levinson methods for formant tracking."
+<list_item> "\bu Vowel-space deformation: i schwa F2 fraction, u schwa F2 fraction, and a i F1 fraction determine the reshaping of the vowel triangle. Values are expressed as percentages relative to a citation-space reference."
+<list_item> "\bu Smoothing Time: Applies low-pass smoothing to F2 inside vowel intervals."
+<list_item> "\bu Source Signal: Select Phonation, Pulse Train, LPCerror, or Deemp Pulse as the excitation source for resynthesis."
+<list_item> "\bu Output Format: Specify WAV or FLAC output."
+
+<entry> "Processing overview"
+
+<normal> "VowelBender performs several stages of processing:"
+<list_item> "\bu Resampling and pre-emphasis (11 kHz for female voices, 10 kHz for male voices)."
+<list_item> "\bu Formant analysis using the selected algorithm."
+<list_item> "\bu Vowel interval detection via TextGrid specification or automatic vowel selection procedures."
+<list_item> "\bu FormantGrid manipulation, including F2 compression or expansion toward modified i and u targets, and F1 shifting for a."
+<list_item> "\bu Transition smoothing using cosine interpolation and optional low-pass smoothing of F2 within vowels."
+<list_item> "\bu Resynthesis using the chosen source signal, followed by recombination with the original signal to preserve unvoiced and high-frequency detail."
+<list_item> "\bu Final sound export and optional logging of formant statistics."
+
+<entry> "Output filenames"
+
+<normal>  "If no Title is provided, VowelBender generates filenames of the form:"
+<normal>  "<basename>_i-<i%>_u-<u%>_a-<a%>_Smooth-<T>_<Source>.wav or .flac"
+
+<entry>
+"Batch processing (CSV/TSV)"
+
+<normal>
+"VowelBender accepts CSV or TSV tables specifying per-file parameters. The following columns are recognized: "
+
+<code>
+"Filename, Gender, i-F2fraction, u-F2fraction, a-F1fraction, Tsmooth, Source, Title, Sourcedir, Targetdir, Formant, Log, OutputFormat, Segments, SegmentTier, Label"
+
+<normal>
+"Missing columns are added with default values."
+
+<entry>
+"Tips and recommended practice"
+
+<list_item>
+"Provide a TextGrid vowel tier for clinical or challenging recordings."
+
+<list_item>
+"Start with moderate vowel-space fractions (50–80%) and adjust based on desired severity."
+
+<list_item>
+"Increase smoothing time for noisy or unstable formant tracks."
+
+<normal>
+"See also @@VowelBender Examples@."
+
+<entry>
+"Dependencies"
+
+<normal>
+"This script requires VowelTriangleProcedures.praat to be available in the same directory or accessible include path."
+
+<entry>
+"Licensing and credits"
+
+<normal>
+"Copyright: 2025–2026, R.J.J.H. van Son & The Netherlands Cancer Institute"
+
+<normal>
+"License: GNU Affero General Public License v3 or later."
+
+<normal>
+"Contact: r.j.j.h.vanson\@ gmail.com, r.v.son\@ nki.nl"
+
+<entry>
+"See also"
+
+<list_item>
+"Sound: To Formant (burg)..."
+
+<list_item>
+"Sound: To Formant (robust)..."
+
+<list_item>
+"Sound: To Formant (sl)..."
+
+<list_item>
+"Sound: To FormantGrid"
+
+<list_item>
+"Sound help"
